@@ -15,7 +15,6 @@ struct DataView: View {
             //                /*@START_MENU_TOKEN@*//*@PLACEHOLDER=Drawing Code@*/ /*@END_MENU_TOKEN@*/
             //            }
             Spacer()
-            Spacer()
         }.border(Color.red)
     }
 }

@@ -13,7 +13,6 @@ struct LogView: View {
     var body: some View {
         return VStack {
             Spacer()
-            Spacer()
             Text(globals.console).scrollIndicators(.visible)
         }
     }
