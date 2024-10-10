@@ -24,12 +24,16 @@ struct AppRootView: View {
                 Text("Logs")
             }.tag(2)
 
-            BTView().tabItem {
+            let btv = BTView().environmentObject(globals)
+            btv.tabItem {
                 Text("Bluetooth")
             }.tag(3)
         }
 
     }
+
+
+
 }
 
 #Preview {
