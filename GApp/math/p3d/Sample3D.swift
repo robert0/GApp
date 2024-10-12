@@ -1,44 +1,49 @@
-package com.eeu.gapp.p3d;
+//
+//  Sample3D.swift
+//  GApp
+//
+//  Created by Robert Talianu
+//
 
 public class Sample3D {
 
-    public Float x = 0.0f;
-    public Float y = 0.0f;
-    public Float z = 0.0f;
+    public var x: Double = 0.0
+    public var y: Double = 0.0
+    public var z: Double = 0.0
 
-    public Sample3D(Float x, Float y, Float z) {
-        this.x = x;
-        this.y = y;
-        this.z = z;
+    /**
+     * @param x
+     * @param y
+     * @param z
+     */
+    init(   _ x: Double, _ y: Double, _ z: Double) {
+        self.x = x
+        self.y = y
+        self.z = z
+    }
+    
+    public func getX() -> Double {
+        return x
     }
 
-
-    public Sample3D() {
+    public func getY() -> Double {
+        return y
     }
 
-
-    public Float getX() {
-        return x;
+    public func getZ() -> Double {
+        return z
     }
 
-    public void setX(Float x) {
-        this.x = x;
+    public func setX(_ x: Double) {
+        self.x = x
     }
 
-    public Float getY() {
-        return y;
+    public func setY(_ y: Double) {
+        self.y = y
     }
 
-    public void setY(Float y) {
-        this.y = y;
-    }
-
-    public Float getZ() {
-        return z;
-    }
-
-    public void setZ(Float z) {
-        this.z = z;
+    public func setZ(_ z: Double) {
+        self.z = z
     }
 
     /**
@@ -52,16 +57,16 @@ public class Sample3D {
      * @param index
      * @return
      */
-    public Float getByIndex(int index) {
-        switch (index) {
-            case 0:
-                return x;
-            case 1:
-                return y;
-            case 2:
-                return z;
-            default:
-                return 0f;
+    public func getByIndex(_ index: Int) -> Double {
+        switch index {
+        case 0:
+            return x
+        case 1:
+            return y
+        case 2:
+            return z
+        default:
+            return 0.0
         }
     }
 }

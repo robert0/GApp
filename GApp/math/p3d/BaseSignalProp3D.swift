@@ -1,64 +1,78 @@
-package com.eeu.gapp.p3d;
+//
+//  BaseSignalProp3D.swift
+//  GApp
+//
+//  Created by Robert Talianu
+//
 
-import java.util.List;
 /**
- * 
+ *
  */
 public class BaseSignalProp3D {
-    private int startIndex;
-    private int endIndex;
-    private double level;
-
-    private int originalSignalLength;
-
-    private List<Sample3D> base;
-
+    private var startIndex: Int = 0
+    private var endIndex: Int = 0
+    private var level: Double = 0
+    private var originalSignalLength: Int = 0
+    private var base: [Sample3D] = []
 
     /**
-     * 
      */
-    public BaseSignalProp3D() {
-		// TODO Auto-generated constructor stub
-	}
-    
-    
-    public int getOriginalSignalLength() {
-        return originalSignalLength;
+    public func getOriginalSignalLength() -> Int {
+        return self.originalSignalLength
+
     }
 
-    public void setOriginalSignalLength(int originalSignalLength) {
-        this.originalSignalLength = originalSignalLength;
-    }
-    public double getLevel() {
-        return level;
-    }
-
-    public void setLevel(double level) {
-        this.level = level;
+    /**
+     */
+    public func setOriginalSignalLength(_ originalSignalLength: Int) {
+        self.originalSignalLength = originalSignalLength
     }
 
-    public int getStartIndex() {
-        return startIndex;
+    /**
+     */
+    public func getLevel() -> Double {
+        return self.level
     }
 
-    public void setStartIndex(int startIndex) {
-        this.startIndex = startIndex;
+    /**
+     */
+    public func setLevel(_ level: Double) {
+        self.level = level
     }
 
-    public int getEndIndex() {
-        return endIndex;
+    /**
+     */
+    public func getStartIndex() -> Int {
+        return self.startIndex
     }
 
-    public void setEndIndex(int endIndex) {
-        this.endIndex = endIndex;
+    /**
+     */
+    public func setStartIndex(_ startIndex: Int) {
+        self.startIndex = startIndex
     }
 
-    public List<Sample3D> getBase() {
-        return base;
+    /**
+     */
+    public func getEndIndex() -> Int {
+        return self.endIndex
     }
 
-    public void setBase(List<Sample3D> base) {
-        this.base = base;
+    /**
+     */
+    public func setEndIndex(_ endIndex: Int) {
+        self.endIndex = endIndex
     }
 
+    /**
+     */
+    public func getBase() -> [Sample3D] {
+        return self.base
+    }
+
+    /**
+     */
+    public func setBase(_ base: [Sample3D]) {
+        self.base = base
+    }
 }

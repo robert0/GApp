@@ -1,21 +1,30 @@
-package com.eeu.gapp.p3d;
+//
+//  Sample4D.swift
+//  GApp
+//
+//  Created by Robert Talianu
+//
 
 /**
  *
  */
-public class Sample4D extends Sample3D {
-    public long time = 0;
+public class Sample4D: Sample3D {
+    public var time: Int64 = 0
 
-    public Sample4D(Float x, Float y, Float z, long time) {
-        super(x, y, z);
-        this.time = time;
+    /**
+     *
+     * @return
+     */
+    init(_ x: Double, _ y: Double, _ z: Double, _ time: Int64) {
+        super.init(x, y, z)
+        self.time = time
     }
 
     /**
      *
      * @return
      */
-    public long getTime() {
-        return time;
+    public func getTime() -> Int64 {
+        return self.time
     }
 }

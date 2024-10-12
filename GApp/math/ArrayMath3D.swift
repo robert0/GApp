@@ -1,13 +1,10 @@
-package com.eeu.gapp.math;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
-
-import com.eeu.gapp.p3d.BaseSignalProp;
-import com.eeu.gapp.p3d.BaseSignalProp3D;
-import com.eeu.gapp.p3d.Sample3D;
-
+//
+//  ArrayMath3D.swift
+//  GApp
+//
+//  Created by Robert Talianu
+//
+import Foundation
 
 public class ArrayMath3D {
 
@@ -17,23 +14,17 @@ public class ArrayMath3D {
      * @param absMaxNorm
      * @return
      */
-    public static List<Sample3D> normalizeToNew(List<Sample3D> signal, Float absMaxNorm) {
-        //maximus
-        Float maxVx = signal.stream().map(s -> s.x).map(Math::abs).reduce(Float::max).get();
-        Float maxVy = signal.stream().map(s -> s.y).map(Math::abs).reduce(Float::max).get();
-        //Float maxVz = signal.stream().map(s -> s.z).map(Math::abs).reduce(Float::max).get();
-        Float maxTotAbs = Math.max(Math.abs(maxVx), Math.abs(maxVy));
-        //minimums
-        Float minVx = signal.stream().map(s -> s.x).map(Math::abs).reduce(Float::min).get();
-        Float minVy = signal.stream().map(s -> s.y).map(Math::abs).reduce(Float::min).get();
-        Float minTotAbs = Math.max(Math.abs(minVx), Math.abs(minVy));
+    public func normalizeToNew(_ signal: [Sample3D], _ absMaxNorm: Double)  -> [Sample3D] {
+        var maxVx: Double = signal.map { abs($0.x) }.max() ?? 0.0
+        var maxVy: Double = signal.map { abs($0.y) }.max() ?? 0.0
+        var maxTotAbs: Double = max(maxVx, maxVy)
 
-        //Float minVz = signal.stream().map(s -> s.z).map(Math::abs).reduce(Float::min).get();
-        Float factor = absMaxNorm / Math.max(maxTotAbs, minTotAbs);
-        List<Sample3D> result = signal.stream().map(s -> {
-            return new Sample3D(s.x * factor, s.y * factor, s.z * factor);
-        }).collect(Collectors.toList());
-        return result;
+        var factor: Double = absMaxNorm / maxTotAbs
+        var result: [Sample3D] = signal.map {
+            Sample3D($0.x * factor, $0.y * factor, $0.z * factor)
+        }
+
+        return result
     }
 
     /**
@@ -43,8 +34,10 @@ public class ArrayMath3D {
      * @param isCartesianProduct
      * @return
      */
-    public static BaseSignalProp<Sample3D> extractBaseAboveLevelFactor(List<Sample3D> signal, double levelFactor, boolean isCartesianProduct) {
-        return isCartesianProduct? extractBaseAboveLevelFactorCartesian(signal, levelFactor): extractBaseAboveLevelFactorSum(signal, levelFactor);
+    public func extractBaseAboveLevelFactor( _ signal: [Sample3D], _ levelFactor: Double, _ isCartesianProduct: Bool) -> BaseSignalProp3D {
+        return isCartesianProduct
+            ? extractBaseAboveLevelFactorCartesian(signal, levelFactor)
+            : extractBaseAboveLevelFactorSum(signal, levelFactor)
     }
 
     /**
@@ -53,38 +46,40 @@ public class ArrayMath3D {
      * @param levelFactor
      * @return
      */
-    private static BaseSignalProp<Sample3D> extractBaseAboveLevelFactorSum(List<Sample3D> signal, double levelFactor) {
-        BaseSignalProp<Sample3D> bprop = new BaseSignalProp();
-        bprop.setLevelFactor(levelFactor);
-        bprop.setOriginalSignalLength(signal.size());
+    public func extractBaseAboveLevelFactorSum( _ signal: [Sample3D], _ levelFactor: Double) -> BaseSignalProp3D {
+        let bprop = BaseSignalProp3D()
+        bprop.setLevel(levelFactor)
+        bprop.setOriginalSignalLength(signal.count)
 
-        Float maxVx = signal.stream().map(s -> s.x).map(Math::abs).reduce(Float::max).get();
-        Float maxVy = signal.stream().map(s -> s.y).map(Math::abs).reduce(Float::max).get();
-        Float maxV = Math.max(maxVx, maxVy);
+        let maxVx = signal.map { abs($0.x) }.max() ?? 0.0
+        let maxVy = signal.map { abs($0.y) }.max() ?? 0.0
+        let maxV = max(maxVx, maxVy)
 
-        int beginIndex = 0;
-        for (int i = 0; i < signal.size(); i++) {
-            Sample3D sp = signal.get(i);
-            if (sp.x > levelFactor * maxV || sp.x < -levelFactor * maxV ||
-                    sp.y > levelFactor * maxV || sp.y < -levelFactor * maxV) {
-                beginIndex = i;
-                break;
+        var beginIndex = 0
+        for (i, sp) in signal.enumerated() {
+            if sp.x > levelFactor * maxV || sp.x < -levelFactor * maxV
+                || sp.y > levelFactor * maxV || sp.y < -levelFactor * maxV
+            {
+                beginIndex = i
+                break
             }
         }
-        int endIndex = signal.size() - 1;
-        for (int i = 0; i < signal.size(); i++) {
-            int lastix = signal.size() - 1 - i;
-            Sample3D sp = signal.get(lastix);
-            if (sp.x > levelFactor * maxV || sp.x < -levelFactor * maxV ||
-                    sp.y > levelFactor * maxV || sp.y < -levelFactor * maxV) {
-                endIndex = lastix;
-                break;
+
+        var endingIndex = signal.count - 1
+        for i in stride(from: signal.count - 1, to: 0, by: -1) {
+            var sp = signal[i]
+            if sp.x > levelFactor * maxV || sp.x < -levelFactor * maxV
+                || sp.y > levelFactor * maxV || sp.y < -levelFactor * maxV
+            {
+                endingIndex = i
+                break
             }
         }
-        bprop.setStartIndex(beginIndex);
-        bprop.setEndIndex(endIndex);
-        bprop.setBase(new ArrayList<Sample3D> (signal.subList(beginIndex, endIndex)));
-        return bprop;
+
+        bprop.setStartIndex(beginIndex)
+        bprop.setEndIndex(endingIndex)
+        bprop.setBase(Array(signal[beginIndex..<endingIndex]))
+        return bprop
     }
 
     /**
@@ -93,11 +88,10 @@ public class ArrayMath3D {
      * @param levelFactor
      * @return
      */
-    private static BaseSignalProp<Sample3D> extractBaseAboveLevelFactorCartesian(List<Sample3D> signal, double levelFactor) {
+    public func extractBaseAboveLevelFactorCartesian( _ signal: [Sample3D], _ levelFactor: Double) -> BaseSignalProp3D {
         //TODO ...
-        return null;
+        return BaseSignalProp3D()
     }
-
 
     /**
      *
@@ -106,8 +100,10 @@ public class ArrayMath3D {
      * @param isCartesianProduct
      * @return
      */
-    public static BaseSignalProp3D extractBaseAboveLevel(List<Sample3D> signal, double level, boolean isCartesianProduct) {
-        return isCartesianProduct? extractBaseAboveLevelCartesian(signal, level): extractBaseAboveLevelSum(signal, level);
+    public func extractBaseAboveLevel( _ signal: [Sample3D], _ level: Double, _ isCartesianProduct: Bool) -> BaseSignalProp3D {
+        return isCartesianProduct
+            ? extractBaseAboveLevelCartesian(signal, level)
+            : extractBaseAboveLevelSum(signal, level)
     }
 
     /**
@@ -116,34 +112,32 @@ public class ArrayMath3D {
      * @param level
      * @return
      */
-    private static BaseSignalProp3D extractBaseAboveLevelSum(List<Sample3D> signal, double level) {
-        BaseSignalProp3D bprop = new BaseSignalProp3D();
-        bprop.setLevel(level);
-        bprop.setOriginalSignalLength(signal.size());
+    public func extractBaseAboveLevelSum(_ signal: [Sample3D], _ level: Double) -> BaseSignalProp3D {
+        var bprop = BaseSignalProp3D()
+        bprop.setLevel(level)
+        bprop.setOriginalSignalLength(signal.count)
 
-        int beginIndex = 0;
-        for (int i = 0; i < signal.size(); i++) {
-            Sample3D sp = signal.get(i);
-            if (sp.x > level || sp.x < -level ||
-                    sp.y > level || sp.y < -level) {
-                beginIndex = i;
-                break;
+        var beginIndex = 0
+        for (i, sp) in signal.enumerated() {
+            if sp.x > level || sp.x < -level || sp.y > level || sp.y < -level {
+                beginIndex = i
+                break
             }
         }
-        int endIndex = signal.size() - 1;
-        for (int i = 0; i < signal.size(); i++) {
-            int lastix = signal.size() - 1 - i;
-            Sample3D sp = signal.get(lastix);
-            if (sp.x > level || sp.x < -level ||
-                    sp.y > level || sp.y < -level) {
-                endIndex = lastix;
-                break;
+
+        var endIndex = signal.count - 1
+        for i in stride(from: signal.count - 1, to: 0, by: -1) {
+            let sp = signal[i]
+            if sp.x > level || sp.x < -level || sp.y > level || sp.y < -level {
+                endIndex = i
+                break
             }
         }
-        bprop.setStartIndex(beginIndex);
-        bprop.setEndIndex(endIndex);
-        bprop.setBase(new ArrayList (signal.subList(beginIndex, endIndex)));
-        return bprop;
+
+        bprop.setStartIndex(beginIndex)
+        bprop.setEndIndex(endIndex)
+        bprop.setBase(Array(signal[beginIndex..<endIndex]))
+        return bprop
     }
 
     /**
@@ -152,9 +146,8 @@ public class ArrayMath3D {
      * @param level
      * @return
      */
-    private static BaseSignalProp3D extractBaseAboveLevelCartesian(List<Sample3D> signal, double level) {
-        //TODO ...
-        return null;
+    public func extractBaseAboveLevelCartesian( _ signal: [Sample3D], _ level: Double) -> BaseSignalProp3D {
+        return BaseSignalProp3D()
     }
 
     /**
@@ -163,86 +156,89 @@ public class ArrayMath3D {
      * @param data
      * @return
      */
-    public static List<Float> phasedCorrelation(List<Sample3D> base, List<Sample3D> data) {
-        int reLen = data.size() - base.size();
-        List<Float> res = new ArrayList(reLen);
-        for (int i = 0; i < reLen; i++) {
-            res.add(correlationIn(base, data, i));
+    public func phasedCorrelation(_ base: [Sample3D], _ data: [Sample3D]) -> [Double] {
+        var reLen = data.count - base.count
+        var res: [Double] = Array(repeating: 0.0, count: reLen)
+        for i in 0..<reLen {
+            res[i] = correlationIn(base, data, i)
         }
 
-        return res;
+        return res
     }
-
     /**
      *
      * @param base
      * @param data
      * @return
      */
-    public static double correlation(List<Sample3D> base, List<Sample3D> data) {
+    public func correlation(_ base: [Sample3D], _ data: [Sample3D]) -> Double {
         //TODO: check here that arrays are not null, of the same length etc
-
-        return correlationIn(base, data, 0);
+        return correlationIn(base, data, 0)
     }
 
-    public static float correlationIn(List<Sample3D> base, List<Sample3D> data, int startPos) {
-        double xsx = 0.0, ysx = 0.0;
-        double xsy = 0.0, ysy = 0.0;
-        double xsxx = 0.0, ysxx = 0.0;
-        double xsyy = 0.0, ysyy = 0.0;
-        double xsxy = 0.0, ysxy = 0.0;
-        Sample3D ZERO = new Sample3D(0f,0f,0f);
+    /**
+     *
+     * @param base
+     * @param data
+     * @param startPos
+     * @return
+     */
+    public func correlationIn( _ base: [Sample3D], _ data: [Sample3D], _ startPos: Int) -> Double {
+        var xsx = 0.0
+        var ysx = 0.0
+        var xsy = 0.0
+        var ysy = 0.0
+        var xsxx = 0.0
+        var ysxx = 0.0
+        var xsyy = 0.0
+        var ysyy = 0.0
+        var xsxy = 0.0
+        var ysxy = 0.0
+        let ZERO = Sample3D(0.0, 0.0, 0.0)
 
-        int n = base.size();
-        for (int i = 0; i < n; i++) {
-            Sample3D basep =  base.get(i);
-            Sample3D datap = (i + startPos) >= data.size() ? ZERO : data.get(i + startPos);
+        let n = base.count
+        for i in 0..<n {
+            let basep = base[i]
+            let datap = (i + startPos) >= data.count ? ZERO : data[i + startPos]
+
+            let xx = basep.x
+            let xy = datap.x
 
             //first axis
-            double xx = basep.x;
-            double xy = datap.x;
-
-            xsx += xx;
-            xsy += xy;
-            xsxx += xx * xx;
-            xsyy += xy * xy;
-            xsxy += xx * xy;
+            xsx += xx
+            xsy += xy
+            xsxx += xx * xx
+            xsyy += xy * xy
+            xsxy += xx * xy
 
             //second axis
-            double yx = basep.y;
-            double yy = datap.y;
+            var yx = basep.y
+            var yy = datap.y
 
-            ysx += yx;
-            ysy += yy;
-            ysxx += yx * yx;
-            ysyy += yy * yy;
-            ysxy += yx * yy;
+            ysx += yx
+            ysy += yy
+            ysxx += yx * yx
+            ysyy += yy * yy
+            ysxy += yx * yy
         }
 
         // covariation
-        double dn = n;
+        var dn: Double = Double(n)
 
-        //*** first axis
-        double xcov = xsxy / dn - xsx * xsy / dn / dn;
-        // standard error of x
-        double xsigmax = Math.sqrt(xsxx / dn - xsx * xsx / dn / dn);
-        // standard error of y
-        double xsigmay = Math.sqrt(xsyy / dn - xsy * xsy / dn / dn);
-        // correlation is just a normalized covariation
-        double cx = xcov / xsigmax / xsigmay;
+        //first axis
+        var xcov = xsxy / dn - xsx * xsy / dn / dn
+        var xsigmax = sqrt(xsxx / dn - xsx * xsx / dn / dn)
+        var xsigmay = sqrt(xsyy / dn - xsy * xsy / dn / dn)
+        var cx = xcov / xsigmax / xsigmay
 
         //*** second axis
-        double ycov = ysxy / dn - ysx * ysy / dn / dn;
-        // standard error of x
-        double ysigmax = Math.sqrt(ysxx / dn - ysx * ysx / dn / dn);
-        // standard error of y
-        double ysigmay = Math.sqrt(ysyy / dn - ysy * ysy / dn / dn);
-        // correlation is just a normalized covariation
-        double cy = ycov / ysigmax / ysigmay;
+        var ycov = ysxy / dn - ysx * ysy / dn / dn
+        var ysigmax = sqrt(ysxx / dn - ysx * ysx / dn / dn)
+        var ysigmay = sqrt(ysyy / dn - ysy * ysy / dn / dn)
+        var cy = ycov / ysigmax / ysigmay
 
-       // return (float) (cx * cy);
+        return 0.5 * (cx + cy)
 
-        return 0.5f * ((float) (cx + cy));
     }
 
 }
