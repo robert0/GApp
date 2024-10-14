@@ -2,7 +2,7 @@
 //  ArrayMath.swift
 //  GApp
 //
-//  Created by Robert Talianu on 10.10.2024.
+//  Created by Robert Talianu
 //
 import Foundation
 

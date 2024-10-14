@@ -10,7 +10,13 @@ public class Sample3D {
     public var x: Double = 0.0
     public var y: Double = 0.0
     public var z: Double = 0.0
-
+    
+    /**
+     */
+    init(){
+        //nothing
+    }
+    
     /**
      * @param x
      * @param y
