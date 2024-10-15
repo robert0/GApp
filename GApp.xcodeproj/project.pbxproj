@@ -10,9 +10,33 @@
 		E8160F9E2CAECE82005572D5 /* GApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		E8DA42D32CBE74E1006E13B0 /* Exceptions for "GApp" folder in "GApp" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				p3d/GestureScanningListener.swift,
+			);
+			target = E8160F9D2CAECE82005572D5 /* GApp */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
+/* Begin PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet section */
+		E8DA42D42CBE74E1006E13B0 /* Exceptions for "GApp" folder in "Copy Bundle Resources" phase from "GApp" target */ = {
+			isa = PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet;
+			buildPhase = E8160F9C2CAECE82005572D5 /* Resources */;
+			membershipExceptions = (
+				p3d/GestureScanningListener.swift,
+			);
+		};
+/* End PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		E8160FA02CAECE82005572D5 /* GApp */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				E8DA42D32CBE74E1006E13B0 /* Exceptions for "GApp" folder in "GApp" target */,
+				E8DA42D42CBE74E1006E13B0 /* Exceptions for "GApp" folder in "Copy Bundle Resources" phase from "GApp" target */,
+			);
 			path = GApp;
 			sourceTree = "<group>";
 		};

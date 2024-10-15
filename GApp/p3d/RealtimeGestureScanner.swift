@@ -2,15 +2,9 @@
 //  RealtimeGestureScanner.swift
 //  GApp
 //
-//  Created by Robert Talianu on 14.10.2024.
+//  Created by Robert Talianu 
 //
 
-
-package com.eeu.gapp.p3d;
-
-import java.util.List;
-
-import com.eeu.gapp.math.CircularQueue;
 
 /**
  *
@@ -24,7 +18,7 @@ public class RealtimeGestureScanner {
     private var gestureWindow : GestureWindow = GestureWindow(100);
     private var prevGestureWindow:GestureWindow = GestureWindow(100);
 
-    private CircularQueue<Sample5D> signalBuffer = new CircularQueue(100);
+    private var signalBuffer = RollingQueue<Sample5D>(100);
 
 
     /**
@@ -114,6 +108,8 @@ public class RealtimeGestureScanner {
     }
 
     >> TODO ...
+    
+    
     /**
      *
      * @param x
