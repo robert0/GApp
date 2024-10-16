@@ -14,7 +14,7 @@ public class ArrayMath3D {
      * @param absMaxNorm
      * @return
      */
-    public func normalizeToNew(_ signal: [Sample3D], _ absMaxNorm: Double)  -> [Sample3D] {
+    public static func normalizeToNew(_ signal: [Sample3D], _ absMaxNorm: Double)  -> [Sample3D] {
         var maxVx: Double = signal.map { abs($0.x) }.max() ?? 0.0
         var maxVy: Double = signal.map { abs($0.y) }.max() ?? 0.0
         var maxTotAbs: Double = max(maxVx, maxVy)
@@ -34,7 +34,7 @@ public class ArrayMath3D {
      * @param isCartesianProduct
      * @return
      */
-    public func extractBaseAboveLevelFactor( _ signal: [Sample3D], _ levelFactor: Double, _ isCartesianProduct: Bool) -> BaseSignalProp3D {
+    public static func extractBaseAboveLevelFactor( _ signal: [Sample3D], _ levelFactor: Double, _ isCartesianProduct: Bool) -> BaseSignalProp3D {
         return isCartesianProduct
             ? extractBaseAboveLevelFactorCartesian(signal, levelFactor)
             : extractBaseAboveLevelFactorSum(signal, levelFactor)
@@ -46,7 +46,7 @@ public class ArrayMath3D {
      * @param levelFactor
      * @return
      */
-    public func extractBaseAboveLevelFactorSum( _ signal: [Sample3D], _ levelFactor: Double) -> BaseSignalProp3D {
+    public static func extractBaseAboveLevelFactorSum( _ signal: [Sample3D], _ levelFactor: Double) -> BaseSignalProp3D {
         let bprop = BaseSignalProp3D()
         bprop.setLevel(levelFactor)
         bprop.setOriginalSignalLength(signal.count)
@@ -88,7 +88,7 @@ public class ArrayMath3D {
      * @param levelFactor
      * @return
      */
-    public func extractBaseAboveLevelFactorCartesian( _ signal: [Sample3D], _ levelFactor: Double) -> BaseSignalProp3D {
+    public static func extractBaseAboveLevelFactorCartesian( _ signal: [Sample3D], _ levelFactor: Double) -> BaseSignalProp3D {
         //TODO ...
         return BaseSignalProp3D()
     }
@@ -100,7 +100,7 @@ public class ArrayMath3D {
      * @param isCartesianProduct
      * @return
      */
-    public func extractBaseAboveLevel( _ signal: [Sample3D], _ level: Double, _ isCartesianProduct: Bool) -> BaseSignalProp3D {
+    public static func extractBaseAboveLevel( _ signal: [Sample3D], _ level: Double, _ isCartesianProduct: Bool) -> BaseSignalProp3D {
         return isCartesianProduct
             ? extractBaseAboveLevelCartesian(signal, level)
             : extractBaseAboveLevelSum(signal, level)
@@ -112,7 +112,7 @@ public class ArrayMath3D {
      * @param level
      * @return
      */
-    public func extractBaseAboveLevelSum(_ signal: [Sample3D], _ level: Double) -> BaseSignalProp3D {
+    public static func extractBaseAboveLevelSum(_ signal: [Sample3D], _ level: Double) -> BaseSignalProp3D {
         var bprop = BaseSignalProp3D()
         bprop.setLevel(level)
         bprop.setOriginalSignalLength(signal.count)
@@ -146,7 +146,7 @@ public class ArrayMath3D {
      * @param level
      * @return
      */
-    public func extractBaseAboveLevelCartesian( _ signal: [Sample3D], _ level: Double) -> BaseSignalProp3D {
+    public static func extractBaseAboveLevelCartesian( _ signal: [Sample3D], _ level: Double) -> BaseSignalProp3D {
         return BaseSignalProp3D()
     }
 
@@ -156,7 +156,7 @@ public class ArrayMath3D {
      * @param data
      * @return
      */
-    public func phasedCorrelation(_ base: [Sample3D], _ data: [Sample3D]) -> [Double] {
+    public static func phasedCorrelation(_ base: [Sample3D], _ data: [Sample3D]) -> [Double] {
         var reLen = data.count - base.count
         var res: [Double] = Array(repeating: 0.0, count: reLen)
         for i in 0..<reLen {
@@ -165,13 +165,14 @@ public class ArrayMath3D {
 
         return res
     }
+    
     /**
      *
      * @param base
      * @param data
      * @return
      */
-    public func correlation(_ base: [Sample3D], _ data: [Sample3D]) -> Double {
+    public static func correlation(_ base: [Sample3D], _ data: [Sample3D]) -> Double {
         //TODO: check here that arrays are not null, of the same length etc
         return correlationIn(base, data, 0)
     }
@@ -183,7 +184,7 @@ public class ArrayMath3D {
      * @param startPos
      * @return
      */
-    public func correlationIn( _ base: [Sample3D], _ data: [Sample3D], _ startPos: Int) -> Double {
+    public static func correlationIn( _ base: [Sample3D], _ data: [Sample3D], _ startPos: Int) -> Double {
         var xsx = 0.0
         var ysx = 0.0
         var xsy = 0.0

@@ -14,7 +14,7 @@ public class ArrayMath {
      * Convolves sequences a and b.  The resulting convolution has
      * length a.length+b.length-1.
      */
-    public func conv(_ ax: [Double], _ bx: [Double]) -> [Double] {
+    public static func conv(_ ax: [Double], _ bx: [Double]) -> [Double] {
         var y: [Double] = [Double](
             repeating: 0.0, count: ax.count + bx.count - 1)
         var a: [Double] = ax
@@ -49,7 +49,7 @@ public class ArrayMath {
     /**
      * Computes the cross correlation between sequences a and b.
      */
-    public func xcorr(_ a: [Double], _ b: [Double]) -> [Double] {
+    public static func xcorr(_ a: [Double], _ b: [Double]) -> [Double] {
         var len: Int = a.count
         if b.count > a.count {
             len = b.count
@@ -61,7 +61,7 @@ public class ArrayMath {
     /**
      * Computes the auto correlation of a.
      */
-    public func xcorr(_ a: [Double]) -> [Double] {
+    public static func xcorr(_ a: [Double]) -> [Double] {
         return xcorr(a, a)
     }
 
@@ -69,7 +69,7 @@ public class ArrayMath {
      * Computes the cross correlation between sequences a and b.
      * maxlag is the maximum lag to
      */
-    public func xcorr(_ a: [Double], _ b: [Double], _ maxlag: Int) -> [Double] {
+    public static func xcorr(_ a: [Double], _ b: [Double], _ maxlag: Int) -> [Double] {
         var y = [Double](repeating: 0.0, count: 2 * maxlag + 1)
 
         for lag in stride(from: (b.count - 1), to: -a.count, by: -1) {
@@ -106,7 +106,7 @@ public class ArrayMath {
      * Returns the inner product of a and b.  a and b should be the
      * same length or bad things will happen.
      */
-    public func dot(_ a: [Double], _ b: [Double]) -> Double {
+    public static func dot(_ a: [Double], _ b: [Double]) -> Double {
         var y = 0.0
 
         for x in 0..<a.count {
@@ -120,7 +120,7 @@ public class ArrayMath {
      * Returns the elementwise product of a and b.  a and b should be
      * the same length or bad things will happen.
      */
-    public func times(_ a: [Double], _ b: [Double]) -> [Double] {
+    public static func times(_ a: [Double], _ b: [Double]) -> [Double] {
         var y = [Double](repeating: 0.0, count: a.count)
 
         for x in 0..<y.count {
@@ -133,7 +133,7 @@ public class ArrayMath {
     /**
      * Multiplies each element of a by b.
      */
-    public func times(_ a: [Double], _ b: Double) -> [Double] {
+    public static func times(_ a: [Double], _ b: Double) -> [Double] {
         var y = [Double](repeating: 0.0, count: a.count)
 
         for x in 0..<y.count {
@@ -147,7 +147,7 @@ public class ArrayMath {
      * Returns the elementwise quotient of a divided by b (a./b).  a
      * and b should be the same length or bad things will happen.
      */
-    public func rdivide(_ a: [Double], _ b: [Double]) -> [Double] {
+    public static func rdivide(_ a: [Double], _ b: [Double]) -> [Double] {
         var y = [Double](repeating: 0.0, count: a.count)
 
         for x in 0..<y.count {
@@ -160,7 +160,7 @@ public class ArrayMath {
     /**
      * Divides each element of a by b.
      */
-    public func rdivide(_ a: [Double], _ b: Double) -> [Double] {
+    public static func rdivide(_ a: [Double], _ b: Double) -> [Double] {
         var y = [Double](repeating: 0.0, count: a.count)
 
         for x in 0..<y.count {
@@ -174,7 +174,7 @@ public class ArrayMath {
      * Returns the elementwise sum of a and b.  a and b should be
      * the same length or bad things will happen.
      */
-    public func plus(_ a: [Double], _ b: [Double]) -> [Double] {
+    public static func plus(_ a: [Double], _ b: [Double]) -> [Double] {
         var y = [Double](repeating: 0.0, count: a.count)
 
         for x in 0..<y.count {
@@ -187,7 +187,7 @@ public class ArrayMath {
     /**
      * Adds b to each element of a.
      */
-    public func plus(_ a: [Double], _ b: Double) -> [Double] {
+    public static func plus(_ a: [Double], _ b: Double) -> [Double] {
         var y = [Double](repeating: 0.0, count: a.count)
 
         for x in 0..<y.count {
@@ -201,7 +201,7 @@ public class ArrayMath {
      * Returns the elementwise difference of a and b.  a and b should
      * be the same length or bad things will happen.
      */
-    public func minus(_ a: [Double], _ b: [Double]) -> [Double] {
+    public static func minus(_ a: [Double], _ b: [Double]) -> [Double] {
         var y = [Double](repeating: 0.0, count: a.count)
 
         for x in 0..<y.count {
@@ -214,7 +214,7 @@ public class ArrayMath {
     /**
      * Subtracts b from each element of a (y[x] = a[x]-b).
      */
-    public func minus(_ a: [Double], _ b: Double) -> [Double] {
+    public static func minus(_ a: [Double], _ b: Double) -> [Double] {
         var y = [Double](repeating: 0.0, count: a.count)
         for x in 0..<y.count {
             y[x] = a[x] - b
@@ -225,7 +225,7 @@ public class ArrayMath {
     /**
      * Subtracts each element of b from a (y[x] = a - b[x]).
      */
-    public func minus(_ a: Double, _ b: [Double]) -> [Double] {
+    public static func minus(_ a: Double, _ b: [Double]) -> [Double] {
         var y = [Double](repeating: 0.0, count: b.count)
         for x in 0..<y.count {
             y[x] = a - b[x]
@@ -236,7 +236,7 @@ public class ArrayMath {
     /**
      * Returns the sum of the contents of a.
      */
-    public func sum(_ a: [Double]) -> Double {
+    public static func sum(_ a: [Double]) -> Double {
         var y: Double = 0
         for x in 0..<a.count {
             y += a[x]
@@ -247,7 +247,7 @@ public class ArrayMath {
     /**
      * Returns the max element of a.
      */
-    public func max(_ a: [Double]) -> Double {
+    public static func max(_ a: [Double]) -> Double {
         var y: Double = Double.leastNormalMagnitude
         for x in 0..<a.count {
             if a[x] > y {
@@ -261,7 +261,7 @@ public class ArrayMath {
      * Returns a new array where each element is the maximum of a[i]
      * and b.
      */
-    public func max(_ a: [Double], _ b: Double) -> [Double] {
+    public static func max(_ a: [Double], _ b: Double) -> [Double] {
         var y = [Double](repeating: 0.0, count: a.count)
         for x in 0..<y.count {
             if a[x] > b {
@@ -276,7 +276,7 @@ public class ArrayMath {
     /**
      * Returns the min element of a.
      */
-    public func min(_ a: [Double]) -> Double? {
+    public static func min(_ a: [Double]) -> Double? {
         return a.min()
     }
 
@@ -284,7 +284,7 @@ public class ArrayMath {
      * Returns a new array where each element is the minimum of a[i]
      * and b.
      */
-    public func min(_ a: [Double], _ b: Double) -> [Double] {
+    public static func min(_ a: [Double], _ b: Double) -> [Double] {
         var y = [Double](repeating: 0.0, count: a.count)
         for x in 0..<y.count {
             if a[x] < b {
@@ -303,7 +303,7 @@ public class ArrayMath {
      * @return
      */
 
-    public func normalizeToNew(list: [Double], absMaxNorm: Double) -> [Double] {
+    public static func normalizeToNew(list: [Double], absMaxNorm: Double) -> [Double] {
         var maxV = list.max() ?? 0.0
         var minV = list.min() ?? 0.0
         var factor = absMaxNorm / Double.maximum(abs(maxV), abs(minV))
@@ -317,7 +317,7 @@ public class ArrayMath {
      * @param levelFactor - a value between 0 and 1, 1 meaning the max value form the base array, 0 meaning 0.0 value
      * @return
      */
-    public func extractBaseAboveLevel(_ base: [Double], _ levelFactor: Double)
+    public static func extractBaseAboveLevel(_ base: [Double], _ levelFactor: Double)
         -> [Double]
     {
         var maxV = base.map({ abs($0) }).max() ?? 0.0
@@ -343,7 +343,7 @@ public class ArrayMath {
     /**
     *
      */
-    public func extractBaseAboveLevel(_ signal: [Double], _ levelFactor: Double)
+    public static func extractBaseAboveLevel(_ signal: [Double], _ levelFactor: Double)
         -> BaseSignalProp<Double>
     {
         var bprop: BaseSignalProp = BaseSignalProp<Double>()
@@ -380,7 +380,7 @@ public class ArrayMath {
      * @param test
      * @return
      */
-    public func phasedCorrelation(_ base: [Double], _ test: [Double])
+    public static func phasedCorrelation(_ base: [Double], _ test: [Double])
         -> [Double]
     {
 
@@ -399,7 +399,7 @@ public class ArrayMath {
      * @param ys
      * @return
      */
-    public func correlation(_ xs: [Double], _ ys: [Double]) -> Double {
+    public static func correlation(_ xs: [Double], _ ys: [Double]) -> Double {
         //TODO: check here that arrays are not null, of the same length etc
 
         return self.correlationIn(xs, ys, 0)
@@ -412,7 +412,7 @@ public class ArrayMath {
      * @param startPos
      * @return
      */
-    private func correlationIn(
+    private static func correlationIn(
         _ base: [Double], _ data: [Double], _ startPos: Int
     ) -> Double {
         var sx = 0.0

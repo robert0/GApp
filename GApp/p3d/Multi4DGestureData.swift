@@ -105,7 +105,8 @@ public class Multi4DGestureData {
         
         var  base = baseMap[key]
         if (base == nil) {
-            base = ArrayMath4D.extractBaseAboveLevel(dataMap[key], level, false);
+            //base = ArrayMath4D.extractBaseAboveLevel(dataMap[key]!, self.level, false);
+            base = ArrayMath4D.extractBaseAboveLevel([], self.level, true);
             base?.setKey(key);
             baseMap[key] = base;
         }
