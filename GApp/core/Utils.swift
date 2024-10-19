@@ -2,7 +2,7 @@
 //  Utils.swift
 //  GApp
 //
-//  Created by Robert Talianu on 19.10.2024.
+//  Created by Robert Talianu
 //
 
 import Foundation

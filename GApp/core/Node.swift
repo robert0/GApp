@@ -2,7 +2,7 @@
 //  Node.swift
 //  GApp
 //
-//  Created by Robert Talianu on 15.10.2024.
+//  Created by Robert Talianu
 //
 
 

@@ -1,4 +1,9 @@
-
+//
+//  GestureEvaluationListener.swift
+//  GApp
+//
+//  Created by Robert Talianu
+//
 /**
  *
  */
