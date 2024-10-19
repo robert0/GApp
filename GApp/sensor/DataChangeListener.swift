@@ -1,0 +1,15 @@
+//
+//  gp.swift
+//  GApp
+//
+//  Created by Robert Talianu
+//
+
+
+public protocol DataChangeListener {
+    
+    /**
+     * @return
+     */
+    func onDataChange();
+}

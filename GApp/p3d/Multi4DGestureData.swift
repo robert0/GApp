@@ -17,7 +17,7 @@ public class Multi4DGestureData {
      *
      * @param capacity
      */
-    init(capacity: Int, level: Double, keys: [String]) {
+    init(_ capacity: Int,_ level: Double,_ keys: [String]) {
         self.capacity = capacity;
         self.level = level;
         for key in keys {
@@ -32,7 +32,7 @@ public class Multi4DGestureData {
      * @param y
      * @param z
      */
-    public func add(key:String, x: Double, y: Double, z: Double, time: Int64) {
+    public func add(_ key:String,_ x: Double,_ y: Double,_ z: Double,_ time: Int64) {
         var data = dataMap[key]! // this should not be null
         if (data.count < self.capacity) {
             data.append(Sample4D(x, y, z, time))
@@ -44,7 +44,7 @@ public class Multi4DGestureData {
     /**
      *
      */
-    public func clear(key:String){
+    public func clear(_ key:String){
             dataMap[key]?.removeAll()
         baseMap[key] = nil
     }
@@ -72,7 +72,7 @@ public class Multi4DGestureData {
      *
      * @return
      */
-    public func getData(key:String) -> [Sample4D] {
+    public func getData(_ key:String) -> [Sample4D] {
             return dataMap[key]!
     }
 
@@ -80,7 +80,7 @@ public class Multi4DGestureData {
      *
      * @return
      */
-    public func getPointer(key:String) -> Int {
+    public func getPointer(_ key:String) -> Int {
         return dataMap[key]!.count
     }
     
@@ -97,7 +97,7 @@ public class Multi4DGestureData {
      * @param key
      * @return
      */
-    public func  getBase(key:String) -> BaseSignalProp4D? {
+    public func  getBase(_ key:String) -> BaseSignalProp4D? {
         var signal = dataMap[key]
         if (signal == nil || signal!.isEmpty) {
             return nil

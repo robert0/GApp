@@ -11,7 +11,7 @@
 public class GestureScanningStatus {
 
     private var isGestureStarted: Bool = false
-    private var lastSample: Sample5D = nil
+    private var lastSample: Sample5D? = nil
     private var lastZeroesWindow: ZeroesWindow = ZeroesWindow(500)
     private var gestureWindow: GestureWindow = GestureWindow(100)
 
@@ -25,8 +25,8 @@ public class GestureScanningStatus {
     public func markGesture(
         _ x: Double, _ y: Double, _ z: Double, _ time: Int64
     ) {
-        if lastSample != nil {
-            if lastSample.getType() == 0 && lastZeroesWindow.isReference() {
+        if (lastSample != nil) {
+            if lastSample!.getType() == 0 && lastZeroesWindow.isReference() {
                 //first gesture mark with a reference zeroes and previous zero sample will start a new gesture
                 gestureWindow.clear()
                 gestureWindow.add(x, y, z, time)
@@ -70,8 +70,8 @@ public class GestureScanningStatus {
      * @param time
      */
     public func markZero(_ x: Double, _ y: Double, _ z: Double, _ time: Int64) {
-        if lastSample != nil {
-            if lastSample.getType() == 1 {
+        if (lastSample != nil) {
+            if lastSample!.getType() == 1 {
                 lastZeroesWindow.setFrom(
                     Sample4D(x, y, z, time), Sample4D(x, y, z, time))
                 if isGestureStarted {
@@ -80,7 +80,7 @@ public class GestureScanningStatus {
                 }
                 notifyZeroesStarted()
 
-            } else if lastSample.getType() == 0 {
+            } else if (lastSample!.getType() == 0) {
                 lastZeroesWindow.setEnd(Sample4D(x, y, z, time))
                 if isGestureStarted {
                     gestureWindow.add(Sample4D(x, y, z, time))
@@ -93,10 +93,9 @@ public class GestureScanningStatus {
                     gestureWindow.clear()
                 }
             }
-            lastSample.setFrom(x, y, z, time, 0)
+            lastSample!.setFrom(x, y, z, time, 0)
 
         } else {
-            lastSample.setFrom(nil)
             lastZeroesWindow.setStart(Sample4D(x, y, z, time))
             lastSample = Sample5D(x, y, z, time, 0)
         }

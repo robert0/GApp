@@ -15,7 +15,7 @@ public class ZeroesWindow {
     private var start: Sample4D?
     private var end: Sample4D?
 
-    init(refTime: Int64) {
+    init(_ refTime: Int64) {
         self.refTime = refTime
     }
 

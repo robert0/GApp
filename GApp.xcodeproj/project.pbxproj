@@ -14,7 +14,8 @@
 		E8DA42D32CBE74E1006E13B0 /* Exceptions for "GApp" folder in "GApp" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
-				p3d/GestureScanningListener.swift,
+				sensor/DataStream.swift,
+				sensor/GestureDataStoreInterface.swift,
 			);
 			target = E8160F9D2CAECE82005572D5 /* GApp */;
 		};
@@ -25,7 +26,8 @@
 			isa = PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet;
 			buildPhase = E8160F9C2CAECE82005572D5 /* Resources */;
 			membershipExceptions = (
-				p3d/GestureScanningListener.swift,
+				sensor/DataStream.swift,
+				sensor/GestureDataStoreInterface.swift,
 			);
 		};
 /* End PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet section */

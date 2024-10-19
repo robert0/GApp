@@ -11,7 +11,7 @@ public class GestureWindow {
     /**
      *  Constructor
      */
-    init(initialCapacity: Int) {
+    init(_ initialCapacity: Int) {
         samples = []
     }
 

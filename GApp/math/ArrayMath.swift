@@ -303,7 +303,7 @@ public class ArrayMath {
      * @return
      */
 
-    public static func normalizeToNew(list: [Double], absMaxNorm: Double) -> [Double] {
+    public static func normalizeToNew(_ list: [Double], _ absMaxNorm: Double) -> [Double] {
         var maxV = list.max() ?? 0.0
         var minV = list.min() ?? 0.0
         var factor = absMaxNorm / Double.maximum(abs(maxV), abs(minV))

@@ -12,14 +12,14 @@ public class GestureEvaluationStatus {
     private var gestureKey: String
     private var gestureCorrelationFactor: Double = 0.0
 
-    private var isMatching: Bool = false
+    private var match: Bool = false
 
     /**
      *
      * @param gestureKey
      * @param gestureCorrelationFactor
      */
-    init(gestureKey: String, gestureCorrelationFactor: Double) {
+    init(_ gestureKey: String, _ gestureCorrelationFactor: Double) {
         self.gestureKey = gestureKey
         self.gestureCorrelationFactor = gestureCorrelationFactor
     }
@@ -57,14 +57,14 @@ public class GestureEvaluationStatus {
      *
      */
     public func isMatching() -> Bool {
-        return isMatching
+        return match
     }
 
     /**
      *
      */
     public func setMatching(_ matching: Bool) {
-        isMatching = matching
+        match = matching
     }
 
     //use Comparable protocol from swift
