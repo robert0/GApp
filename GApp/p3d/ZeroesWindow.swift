@@ -15,22 +15,38 @@ public class ZeroesWindow {
     private var start: Sample4D?
     private var end: Sample4D?
 
+    /**
+     *
+     * @constructor
+     */
     init(_ refTime: Int64) {
         self.refTime = refTime
     }
 
+    /**
+     *
+     */
     public func getStart() -> Sample4D? {
         return start
     }
 
+    /**
+     *
+     */
     public func setStart(_ start: Sample4D) {
         self.start = start
     }
 
+    /**
+     *
+     */
     public func getEnd() -> Sample4D? {
         return end
     }
 
+    /**
+     *
+     */
     public func setEnd(_ end: Sample4D) {
         self.end = end
     }

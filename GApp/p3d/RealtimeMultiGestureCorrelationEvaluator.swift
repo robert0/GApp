@@ -9,10 +9,9 @@
  *
  */
 public class RealtimeMultiGestureCorrelationEvaluator: RealtimeGestureScanner, GestureScanListener {
+
     private var referenceData: Multi4DGestureData?
-
     private var listener: GestureScanListener?
-
     private var evalListener: GestureEvaluationListener?
 
     /**
