@@ -148,4 +148,17 @@ public class LinkedList<T> {
         }
         return s + "]"
     }
+    
+    /**
+     * @return
+     */
+    public func asList() -> [T] {
+        var list: [T] = []
+        var node = head
+        while node != nil {
+            list.append(node!.value)
+            node = node!.next
+        }
+        return list
+    }
 }

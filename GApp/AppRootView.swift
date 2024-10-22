@@ -2,14 +2,18 @@
 //  ContentView.swift
 //  GApp
 //
-//  Created by Robert Talianu
+//  Created by Robert Talianu on 03.10.2024.
 //
 
 import SwiftUI
 
 struct AppRootView: View {
     @StateObject var globals = Globals()
-
+    
+    init () {
+        MockGenerator.start();
+    }
+    
     var body: some View {
         TabView(
             selection: .constant(1)

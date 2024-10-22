@@ -1,5 +1,5 @@
 //
-//  CircularQueue.swift
+//  RollingQueue.swift
 //  GApp
 //
 //  Created by Robert Talianu

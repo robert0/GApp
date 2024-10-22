@@ -117,7 +117,7 @@ public class RealtimeMultiGestureCorrelationEvaluator: RealtimeGestureScanner, G
 
         //only check the signals if the span is the same
         for gkey in referenceData!.getKeys() {
-            var gBase = referenceData!.getBase(key: gkey)
+            var gBase = referenceData!.getBase(gkey)
             if gBase != nil && gw.getSamples().count == gBase!.getBase().count {
                 notifyGestureEvaluated(gBase!, gw, checkCorrelation(gw, gBase!))
             }

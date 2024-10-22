@@ -30,7 +30,7 @@ public class MockGenerator {
     public static func start() {
 
         Timer.scheduledTimer(
-            timeInterval: 0.05,  //20 times a second
+            timeInterval: 1.00005,  //20 times a second
             target: self,
             selector: #selector(handleTimerExecution),
             userInfo: nil,
@@ -44,9 +44,9 @@ public class MockGenerator {
         //GestureApp.logOnScreen("> new mock iteration...");
         if listener != nil {
 
-            var x = Double.random(in: -10.0...10.0)  //[-10,+10]
-            var y = Double.random(in: -10.0...10.0)  //[-10,+10]
-            var z = Double.random(in: -1.0...1.0)  //[-1,+1]
+            let x = Double.random(in: -10.0...10.0)  //[-10,+10]
+            let y = Double.random(in: -10.0...10.0)  //[-10,+10]
+            let z = Double.random(in: -1.0...1.0)  //[-1,+1]
             //GestureApp.logOnScreen("> notify listener...");
             listener!.onSensorChanged(Utils.getCurrentMillis(), x, y, z)
         }

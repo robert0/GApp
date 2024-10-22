@@ -16,6 +16,7 @@
 			membershipExceptions = (
 				sensor/DataStream.swift,
 				sensor/GestureDataStoreInterface.swift,
+				sensor/SensorMgr.swift,
 			);
 			target = E8160F9D2CAECE82005572D5 /* GApp */;
 		};
@@ -28,6 +29,7 @@
 			membershipExceptions = (
 				sensor/DataStream.swift,
 				sensor/GestureDataStoreInterface.swift,
+				sensor/SensorMgr.swift,
 			);
 		};
 /* End PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet section */

@@ -8,15 +8,18 @@ import SwiftUI
 
 struct AppTabView: View {
     @EnvironmentObject var globals: Globals
-    
+
+    private var mlistener: MockListenerHander = MockListenerHander()
+    private var dataView: DataView = DataView()
+
     // The app panel
     var body: some View {
         return VStack {
             //add buttons
-            HStack  {
-                Spacer ()
+            HStack {
+                Spacer()
                 Button("First") {
-                  globals.logToScreen("First Button Pressed")
+                    globals.logToScreen("First Button Pressed")
                 }
                 Button("Second") {
                     globals.logToScreen("Second Button Pressed")
@@ -28,14 +31,20 @@ struct AppTabView: View {
                     /*@START_MENU_TOKEN@*//*@PLACEHOLDER=Action@*/ /*@END_MENU_TOKEN@*/
                 }
                 Button("Mock") {
-                    /*@START_MENU_TOKEN@*//*@PLACEHOLDER=Action@*/ /*@END_MENU_TOKEN@*/
+                    //MockGenerator.toggleListener()
+                    globals.logger.log("Mock Button Pressed")
+                    globals.logToScreen("Mock Button Pressed")
+                    MockGenerator.toggleListener(mlistener)
                 }
-                Spacer ()
+                Spacer()
             }
-            
+
             //add data view panel
-            DataView()
-            
+            dataView
         }
+    }
+
+    init() {
+        mlistener.setViewUpdateListener(dataView)
     }
 }
