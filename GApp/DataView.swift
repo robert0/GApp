@@ -9,7 +9,31 @@ import os
 
 struct DataView: View, ViewUpdateListener, DataChangeListener, GestureEvaluationListener {
     @ObservedObject var viewModel = DataViewModel()
-    
+
+    struct SignalRenderer: View {
+        var dataProvider: RealtimeMultiGestureAnalyser?
+
+        var body: some View {
+
+            let dataKeys = dataProvider?.getKeys()
+            if dataKeys != nil && dataKeys!.count > 0 {
+                ForEach(dataKeys!, id: \.self) { key in
+                    Text("")
+                    var samples = dataProvider!.getRecordingData(key)
+                    Text("")
+                    if samples != nil {
+                        Path { path in
+                            path.move(to: CGPoint(x: 0, y: 0))
+                            //                            ForEach(samples!, id: \.self) { index, sample in
+                            //                                path.addLine(to: CGPoint(x: Double(index), y: 150.0 + 10.0 * sample.x))
+                            //                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
     /**
      *
      */
@@ -23,21 +47,14 @@ struct DataView: View, ViewUpdateListener, DataChangeListener, GestureEvaluation
             //                /*@START_MENU_TOKEN@*//*@PLACEHOLDER=Drawing Code@*/ /*@END_MENU_TOKEN@*/
             //            }
 
-            Path { path in
-                path.move(to: CGPoint(x: 0, y: 0))
+            var dataProvider = viewModel.dataProvider
+            if dataProvider != nil {
+                //draw pointer
+                //drawPointers(g, dataProvider!, dataProvider!.getCapacity());
 
-                for (i, v) in viewModel.qList.enumerated() {
-                    path.addLine(to: CGPoint(x: Double(i), y: 150.0 + 10.0 * v.x))
-                }
-            }.stroke(Color.blue)
-
-            Path { path in
-                path.move(to: CGPoint(x: 0, y: 0))
-
-                for (i, v) in viewModel.qList.enumerated() {
-                    path.addLine(to: CGPoint(x: Double(i), y: 300.0 + 10.0 * v.y))
-                }
-            }.stroke(Color.red)
+                //draw signals
+                SignalRenderer(dataProvider: viewModel.dataProvider)
+            }
 
         }.border(Color.red)
 
@@ -48,33 +65,32 @@ struct DataView: View, ViewUpdateListener, DataChangeListener, GestureEvaluation
      */
     public func viewUpdate(_ obj: Any) {
         Globals.logToScreen("DataView viewUpdate...")
-        var dobj = obj as! MockListenerHandler
-        var qobj: RollingQueue<Sample4D> = dobj.getQueue()
-        viewModel.qList = qobj.asList()
+        //        var dobj = obj as! MockListenerHandler
+        //        var qobj: RollingQueue<Sample4D> = dobj.getQueue()
+        //        viewModel.qList = qobj.asList()
     }
-        
+
     /**
      *
      */
     public func setDataProvider(_ dataProvider: RealtimeMultiGestureAnalyser) {
         self.viewModel.dataProvider = dataProvider
     }
-    
-    
+
     /**
      *
      */
     public func onDataChange() {
         Globals.logToScreen("DataView onDataChange...")
     }
-    
+
     /**
      *
      */
     public func gestureEvaluationCompleted(_ gw: GestureWindow, _ status: GestureEvaluationStatus) {
         Globals.logToScreen("DataView gestureEvaluationCompleted...")
     }
-    
+
 }
 
 //
@@ -85,5 +101,5 @@ struct DataView: View, ViewUpdateListener, DataChangeListener, GestureEvaluation
 final class DataViewModel: ObservableObject {
     @Published var qList: [Sample4D] = []
     @Published var dataProvider: RealtimeMultiGestureAnalyser?
-    
+
 }
