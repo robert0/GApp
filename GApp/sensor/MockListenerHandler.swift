@@ -7,8 +7,8 @@
 
 import Foundation
 
-public class MockListenerHander: SensorListener {
-    private var queue: RollingQueue = RollingQueue<Sample4D>(10)
+public class MockListenerHandler: SensorListener {
+    private var queue: RollingQueue = RollingQueue<Sample4D>(100)
     private var listener: ViewUpdateListener?
     
     

@@ -9,8 +9,17 @@ import Combine
 import Foundation
 import os
 
-final class Globals: ObservableObject {
-    @Published var console: String = "Console Started..."
+class Globals {
+    //singleton holding console, used by static funcs
+     private static var sharedInstance = Globals()
+     private var updateFun: ((String) -> Void)?
+     private var consoleN: String = "" {
+         //willSet() { }
+         didSet {
+             updateFun?(Globals.sharedInstance.consoleN)
+         }
+     }
+    
     @Published var logger = Logger(
         //        subsystem: Bundle.main.bundleIdentifier!,
         //        category: String(describing: ProductsViewModel.self)
@@ -24,12 +33,22 @@ final class Globals: ObservableObject {
         logger.info("Application Started!...")
     }
 
+   
     /**
      *
      */
-    func logToScreen(_ message: String) {
-        self.console.append("\n\(message)")
-        self.console = String(self.console.suffix(200))
+    static func logToScreen(_ message: String) {
+        Globals.sharedInstance.consoleN.append("\n\(message)")
+        Globals.sharedInstance.consoleN = String(Globals.sharedInstance.consoleN.suffix(1000))
     }
-
+    
+    /**
+     *
+     */
+    static func setChangeCallback(_ fn:((String) -> Void)?) {
+        sharedInstance.updateFun = fn
+        if(sharedInstance.consoleN.isEmpty){
+            sharedInstance.consoleN = "UI Console Started..."
+        }
+    }
 }

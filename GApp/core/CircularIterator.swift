@@ -14,7 +14,15 @@ public class CircularIterator<T> {
     private var cindex: Int = 0
 
     /**
-     * @param
+     * constructor
+     */
+    init(_ list:[T], _ count: Int) {
+        self.list = list
+        self.maxCount = count
+    }
+    
+    /**
+     * constructor
      */
     init(count: Int) {
         self.maxCount = count

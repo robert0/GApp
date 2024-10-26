@@ -5,46 +5,85 @@
 //  Created by Robert Talianu
 //
 import SwiftUI
+import os
 
-
-struct DataView: View, ViewUpdateListener {
-    @StateObject var change = DelayedChange()
-    var qList:[Sample4D] = []
+struct DataView: View, ViewUpdateListener, DataChangeListener, GestureEvaluationListener {
+    @ObservedObject var viewModel = DataViewModel()
     
-    class DelayedChange: ObservableObject {
-        private var queue: [Sample4D] = .init()
-        @Published var value = ""
-       
-        func addChange(_ newValue: [Sample4D]) {
-            queue = newValue
-        }
-    }
-    
-    mutating func viewUpdate(_ obj: Any) {
-        var dobj = obj as! MockListenerHander
-        var qobj:RollingQueue<Sample4D> = dobj.getQueue()
-        self.qList = qobj.asList();
-        //TODO .. force redraw
-        change.addChange(qList)
-    }
-    
-    
+    /**
+     *
+     */
     var body: some View {
-        VStack {
+        //        var s = "Dataview body rendered..." + String(self.qList.count)
+        //        globals.logToScreen(s)
+        //        globals.logToScreen("demo")
+        ZStack {
             Text("This is Dataview Panel!")
             //            Canvas { context, size in
             //                /*@START_MENU_TOKEN@*//*@PLACEHOLDER=Drawing Code@*/ /*@END_MENU_TOKEN@*/
             //            }
-            Spacer()
+
             Path { path in
                 path.move(to: CGPoint(x: 0, y: 0))
-                
-                for (i, v) in qList.enumerated() {
-                    path.addLine(to: CGPoint(x: Double(i), y: v.y))
+
+                for (i, v) in viewModel.qList.enumerated() {
+                    path.addLine(to: CGPoint(x: Double(i), y: 150.0 + 10.0 * v.x))
                 }
-            }.stroke()
-            
+            }.stroke(Color.blue)
+
+            Path { path in
+                path.move(to: CGPoint(x: 0, y: 0))
+
+                for (i, v) in viewModel.qList.enumerated() {
+                    path.addLine(to: CGPoint(x: Double(i), y: 300.0 + 10.0 * v.y))
+                }
+            }.stroke(Color.red)
+
         }.border(Color.red)
 
     }
+
+    /**
+     *
+     */
+    public func viewUpdate(_ obj: Any) {
+        Globals.logToScreen("DataView viewUpdate...")
+        var dobj = obj as! MockListenerHandler
+        var qobj: RollingQueue<Sample4D> = dobj.getQueue()
+        viewModel.qList = qobj.asList()
+    }
+        
+    /**
+     *
+     */
+    public func setDataProvider(_ dataProvider: RealtimeMultiGestureAnalyser) {
+        self.viewModel.dataProvider = dataProvider
+    }
+    
+    
+    /**
+     *
+     */
+    public func onDataChange() {
+        Globals.logToScreen("DataView onDataChange...")
+    }
+    
+    /**
+     *
+     */
+    public func gestureEvaluationCompleted(_ gw: GestureWindow, _ status: GestureEvaluationStatus) {
+        Globals.logToScreen("DataView gestureEvaluationCompleted...")
+    }
+    
+}
+
+//
+// Helper class for DataView struct
+//
+// Created by Robert Talianu
+//
+final class DataViewModel: ObservableObject {
+    @Published var qList: [Sample4D] = []
+    @Published var dataProvider: RealtimeMultiGestureAnalyser?
+    
 }

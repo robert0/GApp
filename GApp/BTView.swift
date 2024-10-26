@@ -7,7 +7,6 @@
 import SwiftUI
 
 struct BTView: View {
-    @EnvironmentObject var globals: Globals
     
     // The bluetooth panel
     var body: some View {

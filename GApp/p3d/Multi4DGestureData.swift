@@ -98,7 +98,7 @@ public class Multi4DGestureData {
      * @return
      */
     public func  getBase(_ key:String) -> BaseSignalProp4D? {
-        var signal = dataMap[key]
+        let signal = dataMap[key]
         if (signal == nil || signal!.isEmpty) {
             return nil
         }

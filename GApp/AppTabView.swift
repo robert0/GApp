@@ -7,10 +7,10 @@
 import SwiftUI
 
 struct AppTabView: View {
-    @EnvironmentObject var globals: Globals
-
-    private var mlistener: MockListenerHander = MockListenerHander()
-    private var dataView: DataView = DataView()
+    private var analyser:RealtimeMultiGestureAnalyser
+    private var eventsHandler:AccelerometerEventHandler
+    private var dataView: DataView
+    private var keys:[String]
 
     // The app panel
     var body: some View {
@@ -19,22 +19,33 @@ struct AppTabView: View {
             HStack {
                 Spacer()
                 Button("First") {
-                    globals.logToScreen("First Button Pressed")
+                    Globals.logToScreen("First Button Pressed")
+                    eventsHandler.clearRecordingData(keys[0])
+                    eventsHandler.setToRecording(keys[0])
+                    //TODO... update keys iterator
                 }
                 Button("Second") {
-                    globals.logToScreen("Second Button Pressed")
+                    Globals.logToScreen("Second Button Pressed")
+                      eventsHandler.clearRecordingData(keys[1]);
+                      eventsHandler.setToRecording(keys[1]);
+                      //TODO... update keys iterator
                 }
                 Button("Third") {
-                    /*@START_MENU_TOKEN@*//*@PLACEHOLDER=Action@*/ /*@END_MENU_TOKEN@*/
+                    Globals.logToScreen("3rd Button!")
+                    eventsHandler.clearRecordingData(keys[2]);
+                    eventsHandler.setToRecording(keys[2]);
+                    //TODO... update keys iterator
                 }
                 Button("Test") {
-                    /*@START_MENU_TOKEN@*//*@PLACEHOLDER=Action@*/ /*@END_MENU_TOKEN@*/
+                    Globals.logToScreen("Testing Clicked !!!...");
+                    eventsHandler.clearTestingData();
+                    eventsHandler.setToRealtimeTesting();
+                    //TODO... update keys iterator
                 }
                 Button("Mock") {
                     //MockGenerator.toggleListener()
-                    globals.logger.log("Mock Button Pressed")
-                    globals.logToScreen("Mock Button Pressed")
-                    MockGenerator.toggleListener(mlistener)
+                    Globals.logToScreen("Mock Button Pressed")
+                    MockGenerator.toggleListener(eventsHandler)
                 }
                 Spacer()
             }
@@ -44,7 +55,38 @@ struct AppTabView: View {
         }
     }
 
+    // constructor
     init() {
-        mlistener.setViewUpdateListener(dataView)
+        //initilize app vars
+        self.keys = ["A", "B", "C"]
+        
+        //Create & link Gesture Analyser
+        analyser = RealtimeMultiGestureAnalyser(keys);
+        
+        //Create the view  and wire it 
+        dataView = DataView()
+        dataView.setDataProvider(analyser)
+        
+        //pview.setStateProvider(eventsHandler);
+        analyser.setChangeListener(dataView);
+        analyser.setEvalListener(dataView);
+        Globals.logToScreen("gesture analyser created and wired...");
+
+        //Create & link accelerometer events handler
+        eventsHandler = AccelerometerEventHandler(analyser);
+        Globals.logToScreen("event handler created...");
+
+//        SensorsManager accelerometerMgr = SensorsManager.getSensorsManager(SensorsManager.TYPE_ACCELEROMETER, 25000);
+//        if (accelerometerMgr != null) {
+//            Globals.logToScreen("accelerometer manager linked...");
+//            accelerometerMgr.registerListener(eventsHandler);
+//            Globals.logToScreen("accelerometer registered & listening...");
+//        }
+
+        
+        Globals.logToScreen("Starting mock generator...");
+        MockGenerator.start();
+        Globals.logToScreen("Mock generator connected...");
+        
     }
 }

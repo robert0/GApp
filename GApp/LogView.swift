@@ -7,19 +7,22 @@
 import SwiftUI
 
 struct LogView: View {
-    @EnvironmentObject var globals: Globals
-    var localStr: String = "Hello, World!"
-
-    init() {
-        //globals.logger.info("LogView.init()")
-        //globals.logToScreen("This is a test log...")
-    }
-
+    @ObservedObject var viewModel = LogViewModel()
+    
     // The logs panel
     var body: some View {
         return VStack {
             Spacer()
-            Text(globals.console).scrollIndicators(.visible)
+            Text(viewModel.text)
         }
     }
+        
+    // The logs panel
+    func logCallbackFunction(_ message:String) {
+        self.viewModel.text = message
+    }
+}
+
+final class LogViewModel: ObservableObject {
+    @Published var text = "UI Logging Initialized..."
 }
