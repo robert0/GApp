@@ -14,7 +14,7 @@ public class RealtimeMultiGestureAnalyser {
     private var realtimeGestureEvaluator: RealtimeMultiGestureCorrelationEvaluator
 
     init(_ recordingKeys: [String]) {
-        recordingData = Multi4DGestureData(100, 2.0, recordingKeys)  //3 gestures
+        recordingData = Multi4DGestureData(200, 2.0, recordingKeys)  //3 gestures
         realtimeGestureEvaluator = RealtimeMultiGestureCorrelationEvaluator(recordingData, 2.0)
     }
 

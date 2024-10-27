@@ -7,26 +7,46 @@
 import SwiftUI
 import os
 
-struct DataView: View, ViewUpdateListener, DataChangeListener, GestureEvaluationListener {
+struct DataView: View, DataChangeListener, GestureEvaluationListener {
     @ObservedObject var viewModel = DataViewModel()
 
-    struct SignalRenderer: View {
-        var dataProvider: RealtimeMultiGestureAnalyser?
+    //  RecordedSignal
+    //  GApp
+    //
+    //  Created by Robert Talianu
+    //
+    struct RecordedSignal: View {
+        @ObservedObject var viewModel: DataViewModel
+
+        init(_ viewModel: DataViewModel) {
+            self.viewModel = viewModel
+        }
 
         var body: some View {
-
-            let dataKeys = dataProvider?.getKeys()
+            Text("Update rederer: \(viewModel.updateCounter)")
+            Text("Recorded data:")
+            let dataKeys = viewModel.dataProvider?.getKeys()
             if dataKeys != nil && dataKeys!.count > 0 {
-                ForEach(dataKeys!, id: \.self) { key in
-                    Text("")
-                    var samples = dataProvider!.getRecordingData(key)
-                    Text("")
-                    if samples != nil {
-                        Path { path in
-                            path.move(to: CGPoint(x: 0, y: 0))
-                            //                            ForEach(samples!, id: \.self) { index, sample in
-                            //                                path.addLine(to: CGPoint(x: Double(index), y: 150.0 + 10.0 * sample.x))
-                            //                            }
+                VStack {
+                    ForEach(0..<dataKeys!.count) { index in
+                        let key = dataKeys![index]
+                        let samples = viewModel.dataProvider!.getRecordingData(key)
+                        if samples != nil {
+                            ZStack {
+                                Path { path in
+                                    path.move(to: CGPoint(x: 0, y: 0))
+                                    for (i, v) in samples!.enumerated() {
+                                        path.addLine(to: CGPoint(x: Double(i), y: 5 * v.x))
+                                    }
+                                }.stroke(Color.blue)
+
+                                Path { path in
+                                    path.move(to: CGPoint(x: 0, y: 0))
+                                    for (i, v) in samples!.enumerated() {
+                                        path.addLine(to: CGPoint(x: Double(i), y: 5 * v.y))
+                                    }
+                                }.stroke(Color.red)
+                            }
                         }
                     }
                 }
@@ -34,40 +54,60 @@ struct DataView: View, ViewUpdateListener, DataChangeListener, GestureEvaluation
         }
     }
 
+    //  TestingSignal
+    //  GApp
+    //
+    //  Created by Robert Talianu
+    //
+    struct TestingSignal: View {
+        @ObservedObject var viewModel: DataViewModel
+
+        init(_ viewModel: DataViewModel) {
+            self.viewModel = viewModel
+        }
+
+        var body: some View {
+            Text("Test data:").offset(x: 0, y: -50)
+            let tdata: RollingQueue<Sample5D>? = viewModel.dataProvider?.getTestingDataBuffer()
+            if tdata != nil && tdata!.size() > 0 {
+                ZStack {
+                    Path { path in
+                        path.move(to: CGPoint(x: 0, y: 0))
+                        for (i, v) in tdata!.asList().enumerated() {
+                            path.addLine(to: CGPoint(x: Double(i), y: 5 * v.x))
+                        }
+                    }.stroke(Color.orange)
+
+                    Path { path in
+                        path.move(to: CGPoint(x: 0, y: 0))
+                        for (i, v) in tdata!.asList().enumerated() {
+                            path.addLine(to: CGPoint(x: Double(i), y: 5 * v.y))
+                        }
+                    }.stroke(Color.cyan)
+                }
+            }
+        }
+    }
     /**
      *
      */
     var body: some View {
-        //        var s = "Dataview body rendered..." + String(self.qList.count)
-        //        globals.logToScreen(s)
-        //        globals.logToScreen("demo")
-        ZStack {
+        VStack {
             Text("This is Dataview Panel!")
-            //            Canvas { context, size in
-            //                /*@START_MENU_TOKEN@*//*@PLACEHOLDER=Drawing Code@*/ /*@END_MENU_TOKEN@*/
-            //            }
 
-            var dataProvider = viewModel.dataProvider
+            let dataProvider = viewModel.dataProvider
             if dataProvider != nil {
-                //draw pointer
-                //drawPointers(g, dataProvider!, dataProvider!.getCapacity());
+                Text("Main View Update: \(viewModel.updateCounter)")
 
                 //draw signals
-                SignalRenderer(dataProvider: viewModel.dataProvider)
+                RecordedSignal(viewModel)
+
+                //draw signals
+                TestingSignal(viewModel)
             }
 
         }.border(Color.red)
 
-    }
-
-    /**
-     *
-     */
-    public func viewUpdate(_ obj: Any) {
-        Globals.logToScreen("DataView viewUpdate...")
-        //        var dobj = obj as! MockListenerHandler
-        //        var qobj: RollingQueue<Sample4D> = dobj.getQueue()
-        //        viewModel.qList = qobj.asList()
     }
 
     /**
@@ -82,6 +122,7 @@ struct DataView: View, ViewUpdateListener, DataChangeListener, GestureEvaluation
      */
     public func onDataChange() {
         Globals.logToScreen("DataView onDataChange...")
+        self.viewModel.updateCounter += 1
     }
 
     /**
@@ -89,17 +130,18 @@ struct DataView: View, ViewUpdateListener, DataChangeListener, GestureEvaluation
      */
     public func gestureEvaluationCompleted(_ gw: GestureWindow, _ status: GestureEvaluationStatus) {
         Globals.logToScreen("DataView gestureEvaluationCompleted...")
+        //self.viewModel.updateCounter += 1
     }
 
 }
 
 //
-// Helper class for DataView struct
+// Helper class for DataView that handles the updates
 //
 // Created by Robert Talianu
 //
 final class DataViewModel: ObservableObject {
-    @Published var qList: [Sample4D] = []
     @Published var dataProvider: RealtimeMultiGestureAnalyser?
+    @Published var updateCounter: Int = 1
 
 }

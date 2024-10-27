@@ -14,10 +14,10 @@ public class RealtimeGestureScanner {
     private var isGestureStarted: Bool = false
     private var lastSample: Sample5D? = nil
     private var lastZeroesWindow: ZeroesWindow = ZeroesWindow(500)
-    private var gestureWindow: GestureWindow = GestureWindow(100)
-    private var prevGestureWindow: GestureWindow = GestureWindow(100)
+    private var gestureWindow: GestureWindow = GestureWindow(200)
+    private var prevGestureWindow: GestureWindow = GestureWindow(200)
 
-    private var signalBuffer = RollingQueue<Sample5D>(100)
+    private var signalBuffer = RollingQueue<Sample5D>(200)
 
     /**
      * @param zeroesThresholdLevel

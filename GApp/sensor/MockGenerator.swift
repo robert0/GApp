@@ -30,7 +30,7 @@ public class MockGenerator {
     public static func start() {
 
         Timer.scheduledTimer(
-            timeInterval: 1.00005,  //20 times a second
+            timeInterval: 0.05,  //20 times a second
             target: self,
             selector: #selector(handleTimerExecution),
             userInfo: nil,
