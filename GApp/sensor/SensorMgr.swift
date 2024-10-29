@@ -4,46 +4,61 @@
 //
 //  Created by Robert Talianu
 //
-import Foundation
+
 import CoreMotion
+import Foundation
 
+
+/**
+ *
+ */
 public class SensorMgr {
-    private let motion = CMMotionManager()
-    private var listener: SensorListener?
+    private static let motion: CMMotionManager = CMMotionManager()
+    private static var listener: SensorListener?
+    private static var timer: Timer?
 
-    public func startAccelerometers() {
+    /*
+     * @param refreshPeriod in seconds
+     */
+    public static func startAccelerometers(_ refreshPeriod: Double) {
+        //TODO ... make sure it does not start again
         // Make sure the accelerometer hardware is available.
-        if self.motion.isAccelerometerAvailable {
-            self.motion.accelerometerUpdateInterval = 1.0 / 20.0  // 20 Hz
-            self.motion.startAccelerometerUpdates()
+        if SensorMgr.motion.isAccelerometerAvailable {
+            Globals.logToScreen("SensorMgr > Accelerometer is starting ...")
+            SensorMgr.motion.accelerometerUpdateInterval = refreshPeriod
+            SensorMgr.motion.startAccelerometerUpdates()
 
-            // Configure a timer to fetch the data.
-            self.timer = Timer(
-                fire: Date(),
-                interval: (1.0 / 20.0),
-                repeats: true,
-                block: { (timer) in
-                    // Get the accelerometer data.
-                    if let data = self.motion.accelerometerData {
-                        let x = data.acceleration.x
-                        let y = data.acceleration.y
-                        let z = data.acceleration.z
+            timer = Timer.scheduledTimer(withTimeInterval: refreshPeriod, repeats: true) { _ in
+                let data = SensorMgr.motion.accelerometerData
+                let x = data?.acceleration.x ?? 0.0
+                let y = data?.acceleration.y ?? 0.0
+                let z = data?.acceleration.z ?? 0.0
+                Globals.logToScreen(
+                    "SensorManager > Accelerometer Data Update: x:\(x), y:\(y), z:\(z)"
+                )
+       
+                // Use the accelerometer data
+                SensorMgr.listener?.onSensorChanged(Utils.getCurrentMillis(), x, y, z)
+            }
 
-                        // Use the accelerometer data
-                        self.listener?.onSensorChanged(Date().timeIntervalSince1970, x, y, z)
-                    }
-                })
-
-            // Add the timer to the current run loop.
-            RunLoop.current.add(self.timer!, forMode: .defaultRunLoopMode)
+        } else {
+            Globals.logToScreen("SensorManager > Accelerometer is not available...")
         }
     }
 
     /*
      * @param listener
      */
-    public func registerListener(_ listener: SensorListener) {
+    public static func stopAccelerometers() {
+        SensorMgr.motion.stopDeviceMotionUpdates()
+        SensorMgr.timer?.invalidate()
+    }
+
+    /*
+     * @param listener
+     */
+    public static func registerListener(_ listener: SensorListener) {
         //TODO... only one listener for now; expand it later if needed
-        self.listener = listener
+        SensorMgr.listener = listener
     }
 }
