@@ -115,7 +115,7 @@ public class ArrayMath4D {
      * @return
      */
     public static func extractBaseAboveLevelSum(_ signal: [Sample4D], _ level: Double) -> BaseSignalProp4D {
-        var bprop = BaseSignalProp4D()
+        let bprop = BaseSignalProp4D()
         bprop.setLevel(level)
         bprop.setOriginalSignalLength(signal.count)
 
@@ -159,7 +159,7 @@ public class ArrayMath4D {
      * @return
      */
     public static func phasedCorrelation(_ base: [Sample4D], _ data: [Sample4D]) -> [Double] {
-        var reLen = data.count - base.count
+        let reLen = data.count - base.count
         var res: [Double] = Array(repeating: 0.0, count: reLen)
         for i in 0..<reLen {
             res[i] = correlationIn(base, data, i)
@@ -215,8 +215,8 @@ public class ArrayMath4D {
             xsxy += xx * xy
 
             //second axis
-            var yx = basep.y
-            var yy = datap.y
+            let yx = basep.y
+            let yy = datap.y
 
             ysx += yx
             ysy += yy
@@ -226,19 +226,19 @@ public class ArrayMath4D {
         }
 
         // covariation
-        var dn: Double = Double(n)
+        let dn: Double = Double(n)
 
         //first axis
-        var xcov = xsxy / dn - xsx * xsy / dn / dn
-        var xsigmax = sqrt(xsxx / dn - xsx * xsx / dn / dn)
-        var xsigmay = sqrt(xsyy / dn - xsy * xsy / dn / dn)
-        var cx = xcov / xsigmax / xsigmay
+        let xcov = xsxy / dn - xsx * xsy / dn / dn
+        let xsigmax = sqrt(xsxx / dn - xsx * xsx / dn / dn)
+        let xsigmay = sqrt(xsyy / dn - xsy * xsy / dn / dn)
+        let cx = xcov / xsigmax / xsigmay
 
         //*** second axis
-        var ycov = ysxy / dn - ysx * ysy / dn / dn
-        var ysigmax = sqrt(ysxx / dn - ysx * ysx / dn / dn)
-        var ysigmay = sqrt(ysyy / dn - ysy * ysy / dn / dn)
-        var cy = ycov / ysigmax / ysigmay
+        let ycov = ysxy / dn - ysx * ysy / dn / dn
+        let ysigmax = sqrt(ysxx / dn - ysx * ysx / dn / dn)
+        let ysigmay = sqrt(ysyy / dn - ysy * ysy / dn / dn)
+        let cy = ycov / ysigmax / ysigmay
 
         return 0.5 * (cx + cy)
 

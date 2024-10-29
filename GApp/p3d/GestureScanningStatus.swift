@@ -11,9 +11,9 @@
 public class GestureScanningStatus {
 
     private var isGestureStarted: Bool = false
-    private var lastSample: Sample5D? = nil
-    private var lastZeroesWindow: ZeroesWindow = ZeroesWindow(500)
-    private var gestureWindow: GestureWindow = GestureWindow(100)
+    private var lastSample: Sample5D?
+    private var lastZeroesWindow: ZeroesWindow = ZeroesWindow(Int64(1000 * Device.Acc_Testing_Gesture_Leading_Zeroes_Time_Interval))
+    private var gestureWindow: GestureWindow = GestureWindow(Device.Acc_Recording_Buffer_Size)
 
     /**
      *

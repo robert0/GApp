@@ -11,7 +11,7 @@ public class Multi4DGestureData {
     private var dataMap = Dictionary<String, [Sample4D]>()
     private var baseMap = Dictionary<String, BaseSignalProp4D>()
     private var capacity: Int
-    private var level = 0.0
+    private var level = 1.0
 
     /**
      *
@@ -105,8 +105,7 @@ public class Multi4DGestureData {
         
         var  base = baseMap[key]
         if (base == nil) {
-            //base = ArrayMath4D.extractBaseAboveLevel(dataMap[key]!, self.level, false);
-            base = ArrayMath4D.extractBaseAboveLevel([], self.level, true);
+            base = ArrayMath4D.extractBaseAboveLevel(dataMap[key]!, self.level, false);
             base?.setKey(key);
             baseMap[key] = base;
         }

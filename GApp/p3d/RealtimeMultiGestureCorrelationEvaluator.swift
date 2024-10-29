@@ -145,7 +145,7 @@ public class RealtimeMultiGestureCorrelationEvaluator: RealtimeGestureScanner, G
         //TODO... should we normalize the data before correlation?
         //List<Sample3D> r_norm = ArrayMath3D.normalizeToNew(getRecordingData().getData(), 1.0f);
         //List<Sample3D> t_norm = ArrayMath3D.normalizeToNew(getTestingData().getData(), 1.0f);
-        var corelationFactor = ArrayMath4D.correlation(gbase.getBase(), gw.getSamples())
+        let corelationFactor = ArrayMath4D.correlation(gbase.getBase(), gw.getSamples())
         return GestureEvaluationStatus(gbase.getKey(), corelationFactor)
     }
 

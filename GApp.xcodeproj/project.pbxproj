@@ -6,6 +6,11 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		E8EB340A2CD15995001E03D4 /* Collections in Frameworks */ = {isa = PBXBuildFile; productRef = E8EB34092CD15995001E03D4 /* Collections */; };
+		E8EB340C2CD15995001E03D4 /* OrderedCollections in Frameworks */ = {isa = PBXBuildFile; productRef = E8EB340B2CD15995001E03D4 /* OrderedCollections */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
 		E8160F9E2CAECE82005572D5 /* GApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -49,6 +54,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E8EB340C2CD15995001E03D4 /* OrderedCollections in Frameworks */,
+				E8EB340A2CD15995001E03D4 /* Collections in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -91,6 +98,8 @@
 			);
 			name = GApp;
 			packageProductDependencies = (
+				E8EB34092CD15995001E03D4 /* Collections */,
+				E8EB340B2CD15995001E03D4 /* OrderedCollections */,
 			);
 			productName = GApp;
 			productReference = E8160F9E2CAECE82005572D5 /* GApp.app */;
@@ -120,6 +129,9 @@
 			);
 			mainGroup = E8160F952CAECE82005572D5;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				E8EB34082CD158F7001E03D4 /* XCRemoteSwiftPackageReference "swift-collections" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = E8160F9F2CAECE82005572D5 /* Products */;
 			projectDirPath = "";
@@ -362,6 +374,30 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		E8EB34082CD158F7001E03D4 /* XCRemoteSwiftPackageReference "swift-collections" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/apple/swift-collections.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.1.4;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		E8EB34092CD15995001E03D4 /* Collections */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = E8EB34082CD158F7001E03D4 /* XCRemoteSwiftPackageReference "swift-collections" */;
+			productName = Collections;
+		};
+		E8EB340B2CD15995001E03D4 /* OrderedCollections */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = E8EB34082CD158F7001E03D4 /* XCRemoteSwiftPackageReference "swift-collections" */;
+			productName = OrderedCollections;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = E8160F962CAECE82005572D5 /* Project object */;
 }
