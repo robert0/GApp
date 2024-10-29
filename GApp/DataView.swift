@@ -9,6 +9,8 @@ import os
 
 struct DataView: View, DataChangeListener, GestureEvaluationListener {
     @ObservedObject var viewModel = DataViewModel()
+    private static let x_scale: Double = Device.View_X_Scale
+    private static let y_scale: Double = Device.View_Y_Scale
 
     //  RecordedSignal
     //  GApp
@@ -36,14 +38,14 @@ struct DataView: View, DataChangeListener, GestureEvaluationListener {
                                 Path { path in
                                     path.move(to: CGPoint(x: 0, y: 0))
                                     for (i, v) in samples!.enumerated() {
-                                        path.addLine(to: CGPoint(x: Double(i), y: 5 * v.x))
+                                        path.addLine(to: CGPoint(x: x_scale * Double(i), y: 100 * v.x))
                                     }
                                 }.stroke(Color.blue)
 
                                 Path { path in
                                     path.move(to: CGPoint(x: 0, y: 0))
                                     for (i, v) in samples!.enumerated() {
-                                        path.addLine(to: CGPoint(x: Double(i), y: 5 * v.y))
+                                        path.addLine(to: CGPoint(x: x_scale * Double(i), y: 100 * v.y))
                                     }
                                 }.stroke(Color.red)
                             }
@@ -74,14 +76,14 @@ struct DataView: View, DataChangeListener, GestureEvaluationListener {
                     Path { path in
                         path.move(to: CGPoint(x: 0, y: 0))
                         for (i, v) in tdata!.asList().enumerated() {
-                            path.addLine(to: CGPoint(x: Double(i), y: 5 * v.x))
+                            path.addLine(to: CGPoint(x: x_scale * Double(i), y: 100 * v.x))
                         }
                     }.stroke(Color.orange)
 
                     Path { path in
                         path.move(to: CGPoint(x: 0, y: 0))
                         for (i, v) in tdata!.asList().enumerated() {
-                            path.addLine(to: CGPoint(x: Double(i), y: 5 * v.y))
+                            path.addLine(to: CGPoint(x: x_scale * Double(i), y: 100 * v.y))
                         }
                     }.stroke(Color.cyan)
                 }
@@ -121,7 +123,7 @@ struct DataView: View, DataChangeListener, GestureEvaluationListener {
      *
      */
     public func onDataChange() {
-        Globals.logToScreen("DataView onDataChange...")
+        //Globals.logToScreen("DataView onDataChange...")
         self.viewModel.updateCounter += 1
     }
 

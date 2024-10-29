@@ -33,9 +33,9 @@ public class SensorMgr {
                 let x = data?.acceleration.x ?? 0.0
                 let y = data?.acceleration.y ?? 0.0
                 let z = data?.acceleration.z ?? 0.0
-                Globals.logToScreen(
-                    "SensorManager > Accelerometer Data Update: x:\(x), y:\(y), z:\(z)"
-                )
+//                Globals.logToScreen(
+//                    "SensorManager > Accelerometer Data Update: x:\(x), y:\(y), z:\(z)"
+//                )
        
                 // Use the accelerometer data
                 SensorMgr.listener?.onSensorChanged(Utils.getCurrentMillis(), x, y, z)
