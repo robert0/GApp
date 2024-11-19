@@ -79,7 +79,7 @@ struct AppTabView: View {
 
         // Create a CMMotionManager instance
         Globals.logToScreen("Initializing Sensor Manager...")
-        SensorMgr.registerListener(eventsHandler)
+        //SensorMgr.registerListener(eventsHandler)
         SensorMgr.startAccelerometers(Device.View_Accelerometer_Interval)
 
         Globals.logToScreen("Starting mock generator...")

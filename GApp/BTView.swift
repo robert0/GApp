@@ -7,7 +7,7 @@
 import SwiftUI
 import CoreBluetooth
 
-struct BTView: View, BTChangeListener {
+struct BTView: View {
     @ObservedObject var viewModel = BTViewModel()
     //@State var $selected: String?
     @State private var selection: String?
@@ -19,68 +19,43 @@ struct BTView: View, BTChangeListener {
                 .imageScale(.large)
                 .foregroundStyle(.gray)
             //Text("BT State: \(viewModel.updateCounter)")
-            Button("Press to Scan for Bluetooth Devices", action: startBTFn)
-            var entries = viewModel.bto?.getPeripheralMap() ?? [:]
-            if !entries.isEmpty {
-                VStack {
-                    Text("Scanning...")
-                    List(selection: $selection) {
-                        ForEach(entries.elements, id: \.key) { key, value in
-                            if(value.name != nil) {//allow only named BTs
-                                Text(value.name!)
-                            }
-                        }
-                        .padding(.bottom)
-                    }
-                    .frame(width: nil, height: 300)
-                    .background(Color.white)
-                    
-                    Button("Connect", action: connectBT)
-                        .disabled(selection == nil)
-                }.background(Color.white).padding(20)
-            }
+            Button("Press to start Bluetooth Streaming", action: startBTAdvertising)
+            Button("Press to start Send Message", action: streamAccelerometerData)
+            
+//            var entries = viewModel.bto?.getPeripheralMap() ?? [:]
+//            if !entries.isEmpty {
+//                VStack {
+//                    Text("Scanning...")
+//                    List(selection: $selection) {
+//                        ForEach(entries.elements, id: \.key) { key, value in
+//                            if(value.name != nil) {//allow only named BTs
+//                                Text(value.name!)
+//                            }
+//                        }
+//                        .padding(.bottom)
+//                    }
+//                    .frame(width: nil, height: 300)
+//                    .background(Color.white)
+//                    
+//                    Button("Connect", action: startBT)
+//                        .disabled(selection == nil)
+//                }.background(Color.white).padding(20)
+//            }
         }
     }
     
-    func startBTFn() {
-        Globals.logToScreen("StartBTFn called..")
-        viewModel.bto!.startScan()
+    func startBTAdvertising() {
+        Globals.logToScreen("startBTAdvertising called..")
+        viewModel.bto = BTPeripheralObj()
+        //viewModel.bto!.setChangeListener(self)
     }
     
-    func connectBT() {
-        Globals.logToScreen("ConnectBT called..")
-        
-    }
-    
-    init() {
-        viewModel.bto = BTObject()
-        viewModel.bto!.setChangeListener(self)
-    }
-    
-    /**
-     * @param btMgr
-     *
-     */
-    func onManagerDataChange(_ btMgr: CBCentralManager) {
-        Globals.logToScreen("BTView onManagerDataChange called..")
-        viewModel.btMgr = btMgr
-        viewModel.updateCounter += 1
-    }
-    
-    /**
-     * @param btMgr
-     * @param peripheral
-     */
-    func onPeripheralChange(_ btMgr: CBCentralManager, _ peripheral: CBPeripheral) {
-        Globals.logToScreen("BTView onPeripheralChange called..")
-        viewModel.updateCounter += 1
-    }
-    
-    /**
-     * @param btMgr
-     */
-    func onPeripheralDataChange() {
-        Globals.logToScreen("BTView onPeripheralDataChange called..")
+   
+    func streamAccelerometerData() {
+        Globals.logToScreen("streamAccelerometerData called..")
+        if(viewModel.bto != nil){
+            SensorMgr.registerListener(viewModel.bto!)
+        }
     }
     
 }
@@ -92,7 +67,7 @@ struct BTView: View, BTChangeListener {
 //
 final class BTViewModel: ObservableObject {
     @Published var updateCounter: Int = 1
-    @Published var bto: BTObject?
+    @Published var bto: BTPeripheralObj?
     @Published var btMgr: CBCentralManager?
     @Published var selection: String?
     

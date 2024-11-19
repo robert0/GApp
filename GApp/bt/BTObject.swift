@@ -5,16 +5,19 @@
 //  Created by Robert Talianu
 //
 import CoreBluetooth
-import UIKit
 import OrderedCollections
+import UIKit
 
 class BTObject: NSObject, CBPeripheralDelegate, CBCentralManagerDelegate {
     // Properties
     private var centralManager: CBCentralManager!
     private var peripheral: CBPeripheral!
+    private let SERVICE_UUID = CBUUID(string: "8c2a81f7-f8b8-4b31-89b4-6b5d98a822db")
+    private let CHARACTERISTIC_UUID = CBUUID(string: "e8bd8c82-2506-4fae-b5f2-9bbbf4ab5b0e")
+    
     private var peripheralsMap = OrderedDictionary<String, CBPeripheral>()
     private var mDataChangeListener: BTChangeListener?
-    
+
     override init() {
         super.init()
         Globals.logToScreen("Starting CBCentralManager...")
@@ -27,134 +30,125 @@ class BTObject: NSObject, CBPeripheralDelegate, CBCentralManagerDelegate {
     public func setChangeListener(_ dataChangeListener: BTChangeListener) {
         mDataChangeListener = dataChangeListener
     }
-    
+
     /**
      *
      */
     func getPeripheralMap() -> OrderedDictionary<String, CBPeripheral> {
         return peripheralsMap
     }
-    
-    
+
     // Called when BT changes state
     func centralManagerDidUpdateState(_ central: CBCentralManager) {
         Globals.logToScreen("Central state update:" + String(central.state.rawValue))
-        
+
         mDataChangeListener?.onManagerDataChange(central)
-        
-        
-//        switch central.state {
-//        case CBManagerState.poweredOn:
-//            // Notify user Bluetooth in ON
-//            //startScan()
-//            fallthrough
-//        case CBManagerState.poweredOff:
-//            // Alert user to turn on Bluetooth
-//            fallthrough
-//        case CBManagerState.resetting:
-//            // Wait for next state update and consider logging interruption of Bluetooth service
-//            fallthrough
-//        case CBManagerState.unauthorized:
-//            // Alert user to enable Bluetooth permission in app Settings
-//            fallthrough
-//        case CBManagerState.unsupported:
-//            // Alert user their device does not support Bluetooth and app will not work as expected
-//            fallthrough
-//        case CBManagerState.unknown:
-//            // Wait for next state update
-//            fallthrough
-//        default:
-//            return
-//            //Globals.logToScreen("Central state update:" + String(central.state.rawValue))
-//        }
+
+        //        switch central.state {
+        //        case CBManagerState.poweredOn:
+        //            // Notify user Bluetooth in ON
+        //            //startScan()
+        //            fallthrough
+        //        case CBManagerState.poweredOff:
+        //            // Alert user to turn on Bluetooth
+        //            fallthrough
+        //        case CBManagerState.resetting:
+        //            // Wait for next state update and consider logging interruption of Bluetooth service
+        //            fallthrough
+        //        case CBManagerState.unauthorized:
+        //            // Alert user to enable Bluetooth permission in app Settings
+        //            fallthrough
+        //        case CBManagerState.unsupported:
+        //            // Alert user their device does not support Bluetooth and app will not work as expected
+        //            fallthrough
+        //        case CBManagerState.unknown:
+        //            // Wait for next state update
+        //            fallthrough
+        //        default:
+        //            return
+        //            //Globals.logToScreen("Central state update:" + String(central.state.rawValue))
+        //        }
     }
 
     // Start Scanning
     func startScan() {
-        Globals.logToScreen("Start Scanning x...")
+        Globals.logToScreen("Start Scanning ...")
         peripheralsMap.removeAll()
         centralManager.scanForPeripherals(withServices: nil, options: nil)
     }
-
-    // If we're powered on, start scanning
-    //    func centralManagerDidUpdateState(_ central: CBCentralManager) {
-    //        Globals.logToScreen("Central state update:" + String(central.state.rawValue))
-    //        if central.state != CBManagerState.poweredOn {
-    //            Globals.logToScreen("Central is not powered on")
-    //        } else {
-    //            Globals.logToScreen("Central scanning for " + ParticlePe.blueLEDCharacteristicUUID.uuidString)
-    //            centralManager.scanForPeripherals(
-    //                withServices: nil,  //[ParticlePe.particleLEDServiceUUID],
-    //                options: [CBCentralManagerScanOptionAllowDuplicatesKey: true])
-    //        }
-    //    }
 
     // Handles the result of the scan
     func centralManager(_ central: CBCentralManager, didDiscover peripheral: CBPeripheral, advertisementData: [String: Any], rssi RSSI: NSNumber) {
         Globals.logToScreen("Scan update ...")
         Globals.logToScreen("Found peripheral: " + (peripheral.name ?? "no-name, ") + peripheral.identifier.uuidString)
-        
+
         //add peripheral to the map
         peripheralsMap[peripheral.identifier.uuidString] = peripheral
-        
+
         mDataChangeListener?.onPeripheralChange(central, peripheral)
-        
-        // We've found it so stop scan
-        //self.centralManager.stopScan()
+    }
 
-        // Copy the peripheral instance
-        //self.peripheral = peripheral
-        //self.peripheral.delegate = self
-      
+    /**
+     * Connect to the provided peripheral...
+     */
+    public func connectToPeripheral(_ peripheral: CBPeripheral) {
+        Globals.logToScreen("Connecting to peripheral: " + (peripheral.name ?? "unknown") + " " + peripheral.identifier.uuidString)
+        //stop scanning first
+        self.centralManager.stopScan()
 
-        // Connect!
-        // self.centralManager.connect(self.peripheral, options: nil)
+        self.peripheral = peripheral
+        self.peripheral.delegate = self
+        self.centralManager.connect(peripheral, options: nil)
+    }
 
+    // retry if error when connecting to peripheral
+    func centralManager(_ central: CBCentralManager, didFailToConnect peripheral: CBPeripheral, error: Error?) {
+        Globals.logToScreen("Failed to connect, retrying...")
+        centralManager.connect(peripheral, options: nil)
     }
 
     // The handler if we do connect succesfully
     func centralManager(_ central: CBCentralManager, didConnect peripheral: CBPeripheral) {
-        Globals.logToScreen("peripheral connected ...")
+        Globals.logToScreen("Peripheral connected ...")
         if peripheral == self.peripheral {
-            Globals.logToScreen("Connected to your Particle Board")
-            peripheral.discoverServices([ParticlePe.particleLEDServiceUUID])
+            Globals.logToScreen("Discovering services...")
+            peripheral.discoverServices(nil)
         }
     }
 
     // Handles services discovery event
     func peripheral(_ peripheral: CBPeripheral, didDiscoverServices error: Error?) {
-        Globals.logToScreen("peripheral services discovery completed...")
+        Globals.logToScreen("Peripheral services discovery completed. " + (error?.localizedDescription ?? "(no-error)"))
         if let services = peripheral.services {
             for service in services {
-                if service.uuid == ParticlePe.particleLEDServiceUUID {
-                    Globals.logToScreen("LED service found")
-                    //Now kick off discovery of characteristics
-                    peripheral.discoverCharacteristics(
-                        [
-                            ParticlePe.redLEDCharacteristicUUID,
-                            ParticlePe.greenLEDCharacteristicUUID,
-                            ParticlePe.blueLEDCharacteristicUUID,
-                        ], for: service)
-                    return
-                }
+                Globals.logToScreen("--s-- discovered service: \(service.uuid.uuidString) \(service.description)")
+                //Now start discovery of characteristics
+                peripheral.discoverCharacteristics(nil, for: service)
             }
         }
     }
 
     // Handling discovery of characteristics
     func peripheral(_ peripheral: CBPeripheral, didDiscoverCharacteristicsFor service: CBService, error: Error?) {
-        Globals.logToScreen("peripheral discovery charat...")
+        Globals.logToScreen("---- peripheral discovery characteristics...")
         if let characteristics = service.characteristics {
             for characteristic in characteristics {
-                Globals.logToScreen("Peripheral characteristic found: " + characteristic.description)
-                if characteristic.uuid == ParticlePe.redLEDCharacteristicUUID {
-                    Globals.logToScreen("Red LED characteristic found")
-                } else if characteristic.uuid == ParticlePe.greenLEDCharacteristicUUID {
-                    Globals.logToScreen("Green LED characteristic found")
-                } else if characteristic.uuid == ParticlePe.blueLEDCharacteristicUUID {
-                    Globals.logToScreen("Blue LED characteristic found")
-                }
+                Globals.logToScreen("---- @ Peripheral characteristic found: \(characteristic.uuid.uuidString) \(characteristic.description)")
             }
         }
+    }
+    
+    
+    func sendText(_ text: String) {
+        guard let peripheral = self.peripheral,
+              let characteristic = peripheral.services?.first?.characteristics?.first(where: { $0.uuid == CHARACTERISTIC_UUID })
+        else {
+            print("Peripheral or characteristic not found")
+            return
+        }
+        
+        print("Sending: \(text)")
+        let data = text.data(using: .utf8)!
+        peripheral.writeValue(data, for: characteristic, type: .withResponse)
     }
 }

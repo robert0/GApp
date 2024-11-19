@@ -30,7 +30,11 @@ public class Sample5D: Sample4D {
         super.init(sample.x, sample.y, sample.z, sample.time)
         self.type = sample.type
     }
-
+    
+    required init(from decoder: any Decoder) throws {
+        fatalError("init(from:) has not been implemented")
+    }
+    
     /**
      * @param x
      * @param y
@@ -54,4 +58,16 @@ public class Sample5D: Sample4D {
         return self.type
     }
 
+    //function to serialize to json
+    override public func toJSON() -> String {
+        return "{x:\(x), y:\(y), z:\(z), time:\(time), type:\(type)}"
+    }
+    
+    //function to serialize to json
+    override public func toJSON(_ numbersDecimalPlaces: Int) -> String {
+        let xx = x.formatted(.number.precision(.fractionLength(numbersDecimalPlaces)))
+        let yy = y.formatted(.number.precision(.fractionLength(numbersDecimalPlaces)))
+        let zz = z.formatted(.number.precision(.fractionLength(numbersDecimalPlaces)))
+        return "{x:\(xx), y:\(yy), z:\(zz), time:\(time), type:\(type)}"
+    }
 }

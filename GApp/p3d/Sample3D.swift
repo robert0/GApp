@@ -5,7 +5,8 @@
 //  Created by Robert Talianu
 //
 
-public class Sample3D {
+public class Sample3D: JSONAble {
+
 
     public var x: Double = 0.0
     public var y: Double = 0.0
@@ -22,7 +23,7 @@ public class Sample3D {
      * @param y
      * @param z
      */
-    init(   _ x: Double, _ y: Double, _ z: Double) {
+    init(_ x: Double, _ y: Double, _ z: Double) {
         self.x = x
         self.y = y
         self.z = z
@@ -75,4 +76,18 @@ public class Sample3D {
             return 0.0
         }
     }
+    
+    //function to serialize to json
+    public func toJSON() -> String {
+        return "{x:\(x), y:\(y), z:\(z)}"
+    }
+    
+    //function to serialize to json
+    public func toJSON(_ numbersDecimalPlaces: Int) -> String {
+        let xx = x.formatted(.number.precision(.fractionLength(numbersDecimalPlaces)))
+        let yy = y.formatted(.number.precision(.fractionLength(numbersDecimalPlaces)))
+        let zz = z.formatted(.number.precision(.fractionLength(numbersDecimalPlaces)))
+        return "{x:\(xx), y:\(yy), z:\(zz)}"
+    }
+    
 }

@@ -38,8 +38,8 @@ class Globals {
      *
      */
     static func logToScreen(_ message: String) {
-        Globals.sharedInstance.consoleN.append("\n\(message)")
-        Globals.sharedInstance.consoleN = String(Globals.sharedInstance.consoleN.suffix(1000))
+        Globals.sharedInstance.consoleN.append("\n#  \(message)")
+        Globals.sharedInstance.consoleN = String(Globals.sharedInstance.consoleN.suffix(2000))
     }
     
     /**
