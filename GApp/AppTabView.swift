@@ -57,20 +57,20 @@ struct AppTabView: View {
     }
 
     // constructor
-    init() {
+    init(_ keys: [String], _ analyser: RealtimeMultiGestureAnalyser) {
         //initilize app vars
-        self.keys = ["A", "B", "C"]
+        self.keys = keys
 
         //Create & link Gesture Analyser
-        analyser = RealtimeMultiGestureAnalyser(keys)
+        self.analyser = analyser
 
         //Create the view  and wire it
         dataView = DataView()
         dataView.setDataProvider(analyser)
 
         //pview.setStateProvider(eventsHandler);
-        analyser.setChangeListener(dataView)
-        analyser.setEvalListener(dataView)
+        self.analyser.setChangeListener(dataView)
+        self.analyser.addEvaluationListener(dataView)
         Globals.logToScreen("Gesture analyser created and wired...")
 
         //Create & link accelerometer events handler
@@ -79,7 +79,7 @@ struct AppTabView: View {
 
         // Create a CMMotionManager instance
         Globals.logToScreen("Initializing Sensor Manager...")
-        //SensorMgr.registerListener(eventsHandler)
+        SensorMgr.registerListener(eventsHandler)
         SensorMgr.startAccelerometers(Device.View_Accelerometer_Interval)
 
         Globals.logToScreen("Starting mock generator...")

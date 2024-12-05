@@ -12,6 +12,14 @@ struct BTView: View {
     //@State var $selected: String?
     @State private var selection: String?
     
+    private var analyser: RealtimeMultiGestureAnalyser
+    private var keys: [String]
+    
+    init(_ keys: [String], _ analyser: RealtimeMultiGestureAnalyser) {
+        self.keys = keys
+        self.analyser = analyser
+    }
+    
     // The bluetooth panel
     var body: some View {
         return VStack {
@@ -19,8 +27,8 @@ struct BTView: View {
                 .imageScale(.large)
                 .foregroundStyle(.gray)
             //Text("BT State: \(viewModel.updateCounter)")
-            Button("Press to start Bluetooth Streaming", action: startBTAdvertising)
-            Button("Press to start Send Message", action: streamAccelerometerData)
+            Button("Press to start Bluetooth Advertising", action: startBTAdvertising)
+            Button("Press for Bluetooth Gestures streaming", action: streamAccelerometerGestureData)
             
 //            var entries = viewModel.bto?.getPeripheralMap() ?? [:]
 //            if !entries.isEmpty {
@@ -46,18 +54,17 @@ struct BTView: View {
     
     func startBTAdvertising() {
         Globals.logToScreen("startBTAdvertising called..")
-        viewModel.bto = BTPeripheralObj()
+        viewModel.bto = BTPeripheralGesture()
         //viewModel.bto!.setChangeListener(self)
     }
     
    
-    func streamAccelerometerData() {
+    func streamAccelerometerGestureData() {
         Globals.logToScreen("streamAccelerometerData called..")
         if(viewModel.bto != nil){
-            SensorMgr.registerListener(viewModel.bto!)
+            self.analyser.addEvaluationListener(viewModel.bto!)
         }
     }
-    
 }
 
 //
@@ -67,8 +74,7 @@ struct BTView: View {
 //
 final class BTViewModel: ObservableObject {
     @Published var updateCounter: Int = 1
-    @Published var bto: BTPeripheralObj?
+    @Published var bto: BTPeripheralGesture?
     @Published var btMgr: CBCentralManager?
     @Published var selection: String?
-    
 }

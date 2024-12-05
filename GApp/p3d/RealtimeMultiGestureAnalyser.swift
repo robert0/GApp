@@ -32,15 +32,16 @@ public class RealtimeMultiGestureAnalyser {
     public func setChangeListener(_ dataChangeListener: DataChangeListener?) {
         mDataChangeListener = dataChangeListener
     }
-
+  
+    
     /**
      *
      * @param evalListener
      */
-    public func setEvalListener(_ evalListener: GestureEvaluationListener) {
-        self.realtimeGestureEvaluator.setEvalListener(evalListener)
+    public func addEvaluationListener(_ evalListener: GestureEvaluationListener){
+        self.realtimeGestureEvaluator.addEvaluationListener(evalListener)
     }
-
+    
     /**
      *
      *

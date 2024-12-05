@@ -1,5 +1,5 @@
 //
-//  ViewController.swift
+//  BTPeripheralObj.swift
 //  GApp
 //
 //  Created by Robert Talianu
@@ -8,12 +8,10 @@ import CoreBluetooth
 import OrderedCollections
 import UIKit
 
-class BTPeripheralObj: NSObject, CBPeripheralManagerDelegate, SensorListener {
-
-    
+class BTPeripheralObj: NSObject, CBPeripheralManagerDelegate {
         
     // Properties
-    var peripheralManager: CBPeripheralManager!
+    public var peripheralManager: CBPeripheralManager!
     
     let serviceUUID = CBUUID(string: "0000FFF0-0000-1000-2000-300040005000")
     let characteristicUUID = CBUUID(string: "0000FFF0-0000-1000-2000-300040005001")
@@ -80,36 +78,6 @@ class BTPeripheralObj: NSObject, CBPeripheralManagerDelegate, SensorListener {
         Globals.logToScreen("Failed to start advertising, retrying...")
         peripheralManager.startAdvertising([CBAdvertisementDataServiceUUIDsKey: [serviceUUID]])
     }
+     
     
-    //sending a message, by notifying all centrals listening on specific characteristic
-    func sendMessage(_ text: String) {
-        guard let peripheralMgr = peripheralManager,
-              let characteristic = self.characteristic
-        else {
-            Globals.logToScreen("BT message not send. PeripheralMgr or Characteristic not initialized")
-            return
-        }
-        
-        Globals.logToScreen("BT Sending text: \(text) : \(self.counter)")
-        let data = text.data(using: .utf8)!
-        peripheralMgr.updateValue(data, for: characteristic, onSubscribedCentrals:nil)
-    }
-    
-    
-    func onSensorChanged(_ time: Int64, _ x: Double, _ y: Double, _ z: Double) {
-        guard let peripheralMgr = peripheralManager,
-              let characteristic = self.characteristic
-        else {
-            Globals.logToScreen("BT message not send. PeripheralMgr or Characteristic not initialized")
-            return
-        }
-        
-        let p4d  = Sample4D(x, y, z, time)
-        let jsonDataStr = p4d.toJSON(6)
-        let jsonData = jsonDataStr.data(using: .utf8) ?? Data()
-        
-        self.counter += 1
-        Globals.logToScreen("BT Sending position: \(jsonDataStr) : \(self.counter)")
-        peripheralMgr.updateValue(jsonData, for: characteristic, onSubscribedCentrals:nil)
-    }
 }

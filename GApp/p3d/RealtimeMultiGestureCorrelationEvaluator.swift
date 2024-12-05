@@ -12,7 +12,7 @@ public class RealtimeMultiGestureCorrelationEvaluator: RealtimeGestureScanner, G
 
     private var referenceData: Multi4DGestureData?
     private var listener: GestureScanListener?
-    private var evalListener: GestureEvaluationListener?
+    private var evalListeners:[GestureEvaluationListener] = []
 
     /**
      *
@@ -43,20 +43,12 @@ public class RealtimeMultiGestureCorrelationEvaluator: RealtimeGestureScanner, G
 
     /**
      *
-     * @return
-     */
-    public func getEvalListener() -> GestureEvaluationListener? {
-        return evalListener
-    }
-
-    /**
-     *
      * @param evalListener
      */
-    public func setEvalListener(_ evalListener: GestureEvaluationListener) {
-        self.evalListener = evalListener
+    public func addEvaluationListener(_ evalListener: GestureEvaluationListener){
+        self.evalListeners.append(evalListener);
     }
-
+    
     /**
      *
      * @return
@@ -133,7 +125,9 @@ public class RealtimeMultiGestureCorrelationEvaluator: RealtimeGestureScanner, G
      * @param status
      */
     private func notifyGestureEvaluated(_ gbase: BaseSignalProp4D, _ gw: GestureWindow, _ status: GestureEvaluationStatus) {
-        self.evalListener?.gestureEvaluationCompleted(gw, status)
+        for listener in self.evalListeners {//TODO check for thread safe access to evalListeners
+            listener.gestureEvaluationCompleted(gw, status)
+        }
     }
 
     /**

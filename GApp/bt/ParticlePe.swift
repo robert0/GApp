@@ -1,5 +1,5 @@
 //
-//  ParticlePeripheral.swift
+//  ParticlePe.swift
 //  GApp
 //
 //  Created by Robert Talianu

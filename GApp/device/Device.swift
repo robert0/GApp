@@ -14,7 +14,7 @@ public class Device {
     public static let Mock_Z_max = 1.0
     
     
-    public static let View_Accelerometer_Interval = 1.01//seconds
+    public static let View_Accelerometer_Interval = 0.01//seconds
     public static let View_X_Scale = 2.0
     public static let View_Y_Scale = 50.0
     

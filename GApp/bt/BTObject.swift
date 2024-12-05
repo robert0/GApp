@@ -1,5 +1,5 @@
 //
-//  ViewController.swift
+//  BTObject.swift
 //  GApp
 //
 //  Created by Robert Talianu

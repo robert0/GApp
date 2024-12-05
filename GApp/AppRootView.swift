@@ -10,17 +10,23 @@ import SwiftUI
 struct AppRootView: View {
     //logger view wg
     private var logView: LogView
-    
+    //initilize app vars
+    private var analyser: RealtimeMultiGestureAnalyser
+    private var keys = ["A", "B", "C"]
+  
     init () {
         //initilize local vars
         self.logView = LogView()
         Globals.setChangeCallback(self.logView.logCallbackFunction)
+        
+        //Create & link Gesture Analyser
+        analyser = RealtimeMultiGestureAnalyser(keys)
     }
     
     var body: some View {
       
         TabView{
-            let av = AppTabView()
+            let av = AppTabView(keys, analyser)
             av.tabItem {
                 Text("App")
             }.tag(1)
@@ -30,7 +36,7 @@ struct AppRootView: View {
             }.tag(2)
            
 
-            let btv = BTView()
+            let btv = BTView(keys, analyser)
             btv.tabItem {
                 Text("Bluetooth")
             }.tag(3)
